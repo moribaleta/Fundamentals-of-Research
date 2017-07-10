@@ -1,0 +1,5 @@
+This objectives of this study is to develop an application that will generate an Optimized route for pickup and delivery using Genetic Algorithm to achieve the following objectives
+
+	a. To study if Genetic Algorithm is applicable in generating optimized route for pickup and delivery
+	b. To reduce cost of delivery and pickup by implementing Genetic Algorithm in routing
+	c. To study the efficiency of using Genetic Algorithm in generating optimize route for pickup and delivery

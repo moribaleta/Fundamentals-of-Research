@@ -1,0 +1,24 @@
+Scopes:
+In general the focus of this study is aimed 
+to develop an application that will generate 
+an optimized route for pickup and delivery. 
+ Metro Manila is selected to be the area to 
+be studied and with 1-3 delivery couriers 
+will be selected. 
+The application can be used by the users 
+and also by the delivery couriers. 
+The system has a secure login for the users 
+and couriers. Managing pickup and delivery is 
+integrated in the application.
+
+limitation:
+Although the research has reached its aims, 
+there are still some unavoidable limitations. 
+First, because of the limited time given, 
+the research was conducted only on a small size 
+of population. Therefore, to generalize the size 
+for larger groups, the study should involve more 
+participants at different age and locations.
+ Finally, the slow network might affect the 
+interest and motivation in participating in the 
+study

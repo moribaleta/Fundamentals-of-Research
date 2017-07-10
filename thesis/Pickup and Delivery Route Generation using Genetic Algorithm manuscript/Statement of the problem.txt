@@ -1,0 +1,4 @@
+This study aims to generate an Optimized route for pickup and delivery using Genetic Algorithm
+	1. Is Genetic Algorithm is applicable in generating route path?
+	2. How can route optimization reduce cost in pickup and delivery?
+	3. What is the efficiency in using this solution as to other solutions?

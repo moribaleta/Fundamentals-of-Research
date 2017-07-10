@@ -1,0 +1,9 @@
+Introduction: 
+
+In todays industry
+Large scale industries are now applying E-commerce
+as a tool for convenience for people, e-commerce is a transaction of buying or selling online, like Amazon, Zalora, Lazada, Alibaba etc.
+but with the further use of e-commerce, logistic businesses are having trouble with the demand. 
+In this study, we hope to develop a web-based app to generate an optimize route for pickup and delivery with time window, 
+therefore reducing the cost for this logistic businesses in each trip. a system that is fully automated and time-efficient.
+Using Genetic Algorithm we the researchers think that it is feasible to be implemented in this type of problem

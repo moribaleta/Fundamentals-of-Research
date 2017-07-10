@@ -1,0 +1,123 @@
+Background of the Study:
+
+e-Commerce industry faces several logistics challenges and it is not just about the lack of standardization in postal addresses.
+• One of the major challenge is the logistical complexity, which consumes huge amount of capital and time to solve it.
+• Small deliveries to many places causes complex routing problems. Deliveries are time-bound and are restricted to time periods and certain routes. Due to the dispersed customer location, it is difficult for the delivery guys to find the customer location
+• For start ups, developing and implementing a system to accept online orders can get expensive. There are two ways to do it: your own system created from scratch or buying a solution.
+Companies operating in logistics industry face unique challenges as delivery guys operate in vast territories. The challenges these companies face include:
+• No real-time coordination
+• Ineffective technology application
+• Admin work
+• Locating customer addresses
+• Visibility of field workforce
+Time equals money in any business and to be honest, managing the field workforce in this competitive environment can be complicated. It is difficult to keep track of each and every driver or delivery boy which in turn results in inefficiency and late deliveries.
+//----------------
+Logistics always was and still remains the most important part of the ecommerce business, because it is the point where an online transaction gets transformed into an offline, hand-to-hand delivery. It is easy to see how successful online retail ventures owe their success to a sharp focus on the logistical part of their operation. The Indian ecommerce industry is looking at a steep rise, slated to touch $100 billion by 2020, and $220 billion by 2025 according to Merrill Lynch. The implications of this growth are enormous. It may well be said that the face of ecommerce and online retail ten years from now, will be completely unrecognisable from what it is today. One of the major forces behind this change would be technology.
+It is interesting to see how much of what we know to be the logistical process is invested in technology. All our products are first inventorized, converted into data using SKU codes – before a single transaction even begins. Further movement of each product then depends on the accessibility of this data – if a product is not in the database, it does not exist.
+The last mile fulfilment is more often than not a headache for most online sellers. This is because the last mile is generally when the product is truly off the grid. There has always been a debate on whether to outsource the last mile delivery or to take it in your own hands, but maybe technology can give us a third option. Let us take a brief look at the current logistics scenario in India, how far have we come, how much further do we have to go 
+///------------------------
+The genetic algorithm
+
+The genetic algorithm is a method for solving both constrained and unconstrained optimization problems that is based on natural selection, the process that drives biological evolution. The genetic algorithm repeatedly modifies a population of individual solutions. At each step, the genetic algorithm selects individuals at random from the current population to be parents and uses them to produce the children for the next generation. Over successive generations, the population "evolves" toward an optimal solution. You can apply the genetic algorithm to solve a variety of optimization problems that are not well suited for standard optimization algorithms, including problems in which the objective function is discontinuous, nondifferentiable, stochastic, or highly nonlinear. The genetic algorithm can address problems of mixed integer programming, where some components are restricted to be integer-valued.
+The genetic algorithm uses three main types of rules at each step to create the next generation from the current population:
+• Selection rules select the individuals, called parents, that contribute to the population at the next generation.
+• Crossover rules combine two parents to form children for the next generation.
+• Mutation rules apply random changes to individual parents to form children.
+
+//----------------
+The Vehicle Routing Problem with Time Windows
+The VRPTW can be described as the problem of design
+ing least cost routes from one depot to a set of 
+geographically scattered points. 
+The routes must be designed in such a way that 
+each point is visited only once by exactly one 
+vehicle within a given time interval, all routes
+ start and end at the depot, and the total demands
+ of all points on one particular route must not 
+exceed the capacity of the vehicle. 
+Both traditional heuristic route construction 
+methods and recent local search algorithms are 
+examined. The basic features of each method are 
+described, and experimental results for 
+Solomon’s benchmark test problems are 
+presented and analyzed.
+ Moreover, we discuss how heuristic methods 
+should be evaluated and propose using 
+the concept of Pareto optimality in the
+ comparison of different heuristic approaches. 
+The metaheuristic methods are described in the second part of 
+this article.
+//----------------------
+
+MACS-VRPTW, an Ant Colony Optimization based 
+approach useful to solve vehicle routing 
+problems with time windows is presented. 
+MACS-VRPTW is organized with a hierarchy of 
+artificial ant colonies designed to successively 
+optimize a multiple objective function: the first
+ colony minimizes the number of vehicles while 
+the second colony minimizes the traveled distances.
+ Cooperation between colonies is performed by
+exchanging information through pheromone updating.
+ We show that MACS-VRPTW is competitive with the
+ best known existing methods both in terms of 
+solution quality and computation time. Moreover, 
+MACS-VRPTW improves some of the best solutions 
+known for a number of problem instances in the 
+literature.
+//------------
+Finding optimal solutions for vehicle
+ routing problem with pickup and delivery 
+services with time windows: 
+A dynamic programming approach based on
+ state–space–time network representations 
+
+In this paper, in order to improve the solution 
+quality and computational efficiency of on-demand
+transportation systems and dynamic ride-sharing 
+services, especially for large-scale real-world 
+transportation networks, we propose a new 
+mathematical programming model for the vehicle 
+routing problem with pickup and delivery with 
+time windows (VRPPDTW) that can fully recognize 
+time-dependent link travel time caused by traffic 
+congestion at different times of day. Based on 
+the Lagrangian relaxation solution framework, we 
+further present a holistic optimization approach 
+for matching passengers’ requests to 
+transportation service providers, synchronizing 
+transportation vehicle routing, and determining 
+request pricing (e.g. through Lagrangian multiplier
+s) for balancing transportation demand satisfaction and resource needs on urban networks. 
+
+//---------
+
+Multi-Objective Genetic Algorithms for 
+Vehicle Routing Problem with Time Windows
+
+The Vehicle Routing Problem with Time windows (VRPTW) is an extension of the capacity constrained Vehicle Routing Problem (VRP). The VRPTW is NP-Complete and instances with 100 customers or more are very hard to solve optimally. We represent the VRPTW as a multi-objective problem and present a genetic algorithm solution 
+using the Pareto ranking technique. We use 
+a direct interpretation of the VRPTW as a
+ multi-objective problem, in which the two 
+objective dimensions are number of vehicles 
+and total cost (distance). An advantage of 
+this approach is that it is unnecessary to 
+derive weights for a weighted sum scoring 
+formula. This prevents the introduction of
+ solution bias towards either of the problem 
+dimensions. We argue that the VRPTW is most 
+naturally viewed as a multi-objective problem, 
+in which both vehicles and cost are of equal
+ value, depending on the needs of the user. A 
+result of our research is that the 
+multi-objective optimization genetic algorithm 
+returns a set of solutions that fairly consider 
+both of these dimensions. 
+Our approach is quite effective, 
+as it provides solutions competitive with 
+the best known in the literature, as well 
+as new solutions that are not biased toward 
+the number of vehicles. A set of well-known 
+benchmark data are used to compare the 
+effectiveness of the proposed method for solving 
+the VRPTW.
