@@ -1,0 +1,26 @@
+REFERENCE 
+1.http://www.pchrd.dost.gov.ph/index.php/news/library-health-news/6140-pros-and-con-of-a-gluten-free-diet 
+2.http://machinelearningmastery.com/gentle-introduction-xgboost-applied-machine-learning/ 
+3. 
+http://www.cureceliacdisease.org/category/faq-about-celiac-disease/ 
+https://glutenfree.ph/2016/06/17/can-you-develop-celiac-disease-as-you-grow-older/ 
+
+RRL: 
+ 
+1.http://houstonceliacs.org/CDResearch.htm 
+2. http://celiac-disease.emedtv.com/celiac-disease-articles.html 
+3.https://www.papermasters.com/celiac-disease.html 
+4.https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4593300/(research) 
+5.https://eng.anu.edu.au/news/anu-engineering-student-helps-diagnose-coeliac-disease-harvard 
+ 
+ 
+https://celiac.org/celiac-disease/resources/checklist/
+
+
+rrs
+1 https://www.researchgate.net/publication/11205595_Decision_Trees_An_Overview_and_Their_Use_in_Medicine
+2. http://onlinelibrary.wiley.com/doi/10.1002/widm.1056/abstract
+
+
+rrl
+1 http://www.sciencedirect.com/science/article/pii/S0169260716303777?via%3Dihub
