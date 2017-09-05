@@ -1,0 +1,116 @@
+<html>
+
+<head>
+    <script src="jquery-3.2.1.min.js"></script>
+    <!-- <script src="csvreader.js"></script> -->
+    <script src="jquery.csv.js"></script>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="json">
+    </div>
+    <div id="text">
+        <div id='classifier'>
+
+            <ul>
+                <li>
+                    classifier
+                </li>
+                <li v-for='data in info.classifier'>
+                    {{data}}
+                </li>
+            </ul>
+        </div>
+        <div id='answer_sheet'>
+            <ul>
+                <li>
+                    answer_sheet
+                </li>
+                <li v-for='data in info.answer_sheet'>
+                    {{data}}
+                </li>
+            </ul>
+        </div>
+        <div id='answer'>
+            {{info.action}}
+        </div>
+    </div>
+
+
+    <script src="decisionstump.js"></script>
+    <script>
+        var classification = null;
+        var vue = new Vue({
+            el: '#text',
+            data: {
+                info: ''
+            },
+            methods: {
+                setData: function (data) {
+                    this.info = data;
+                }
+
+            }
+        });
+
+
+        var dataset;
+        $.ajax({
+            type: "GET",
+            url: "dataset.csv",
+            dataType: "text",
+            success: function (data) {
+                //alert("worked");
+                process(data);
+            },
+            error: function (request, status, error) {
+                //alert(request.responseText);
+            }
+        });
+
+        function process(data) {
+
+            data = data.split('\n');
+            console.log(data);
+            var header = data[0];
+            //$('#text').text(header);
+            var json = [];
+            for (var i = 1; i < data.length - 1; i++) {
+                var attr = data[i].split(',');
+                var input = {};
+                var fields = header.split(',');
+                for (var j = 0; j < fields.length; j++) {
+
+                    if (attr[j] == "FALSE") {
+                        input[fields[j]] = false;
+                    } else if (attr[j] == "TRUE") {
+                        input[fields[j]] = true;
+                    } else {
+                        input[fields[j]] = attr[j];
+                    }
+                }
+                json.push(input);
+            }
+            console.log('data: %o', json);
+            dataset = json;
+            classification = main();
+            console.log(classification);
+            this.vue.setData(classification);
+            $('#json').text(JSON.stringify(json));
+        }
+        /*  var data = $.get('data.csv');
+         console.log(data);
+         data = data.responseText;
+         console.log(data);
+         data = data.split('\n');
+         var label = data[0];
+
+         console.log(data);
+
+         //main();
+         $('#text').val = label; */
+    </script>
+</body>
+
+</html>
