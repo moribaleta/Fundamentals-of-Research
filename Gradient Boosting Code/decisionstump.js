@@ -207,7 +207,7 @@ function main() {
             for (var i = 0; i < dataset.length; i++) {
                 //console.log('dataset: '+dataset[i][key]);
                 if (dataset[i][key] == temp[key][subkey]) {
-                    //console.log('data: ' + dataset[i][key] + ": " + dataset[i].Play);
+                    console.log('data: ' + dataset[i][key] + ": " + dataset[i]['result']);
                     if (dataset[i][result]) {
                         index_diff++;
                         true_++;
@@ -218,7 +218,7 @@ function main() {
                 }
             }
             console.log('subkey: ' + classifier[key][subkey] + " res: " + index_diff);
-            if (true_>false_) {
+            if (true_ > false_) {
                 temp_sheet[key][subkey] = {
                     title: temp_sheet[key][subkey],
                     value: true
@@ -229,44 +229,30 @@ function main() {
                     value: false
                 }
             }
-            console.log('classifier: ' + temp[key][subkey].title + ' = ' + temp_sheet[key][subkey].value);
+            //console.log('classifier: ' + temp[key][subkey].title + ' = ' + temp_sheet[key][subkey].value);
         }
     }
     answer_sheet = temp_sheet;
-    /* console.log('classifier %o', classifier);
+    console.log('classifier %o', classifier);
     console.log('answer_sheet %o', answer_sheet);
- */
+
     console.log('he will play: ' + classify());
     //var message = classify();
-  /*   var ret = {
-        'classifier': classifier,
-        'answer_cheet': answer_sheet,
-        'action': message
-    } */
+    /*   var ret = {
+          'classifier': classifier,
+          'answer_cheet': answer_sheet,
+          'action': message
+      } */
     //return ret;
 }
 
 function classify() {
     var result = 0;
-    /* for (var key in classifier) {
-        for (var subkey in classifier[key]) {
-            
-            if (classifier[key][subkey] == sample_test[key]) {
-                var action = answer_sheet[key][subkey];
-                console.log('attr: ' + key + ' answer: ' + sample_test[key] + ' Play: ' + action);
-                if (action) {
-                    result++;
-                } else {
-                    result--;
-                }
-            }
-        }
-    } */
+
     for (var key in sample_test) {
         for (var subkey in classifier[key]) {
             if (classifier[key][subkey].title == sample_test[key]) {
                 var action = classifier[key][subkey].value;
-                console.log('key: '+key+' sample: '+sample_test[key]+'vs attr: ' + classifier[key][subkey].title + ' answer: ' + classifier[key][subkey].value + ' Play: ' + action);
                 if (action) {
                     result++;
                 } else {
