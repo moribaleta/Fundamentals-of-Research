@@ -4,17 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class DataView extends AppCompatActivity {
     UserData userData;
-    TextView txtName, txtAge, txtResult;
-    ListView listViewData;
+    TextView txtName, txtAge, txtResult,txtDate;
+    //ListView listViewData;
+    LinearLayout linearData;
     ArrayList<Question> arrQuestion = new ArrayList<>();
 
     @Override
@@ -23,21 +25,38 @@ public class DataView extends AppCompatActivity {
         setContentView(R.layout.activity_data_view);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
-        String strName = intent.getStringExtra("NAME");
+       /* String strName = intent.getStringExtra("NAME");
         String strDataSet = intent.getStringExtra("DATASET");
         int intAge = Integer.parseInt(intent.getStringExtra("AGE"));
-        int intResult = Integer.parseInt(intent.getStringExtra("RESULT"));
-        userData = new UserData(strDataSet, strName, intAge, intResult);
-        txtName = (TextView) findViewById(R.id.txtName);
-        txtAge = (TextView) findViewById(R.id.txtAge);
+        int intResult = Integer.parseInt(intent.getStringExtra("RESULT"));*/
+        /*userData = new UserData(strDataSet, strName, intAge, intResult);*/
+        String strId = intent.getStringExtra("ID");
+        getUserData(strId);
+        txtName = (TextView) findViewById(R.id.textName);
+        txtAge = (TextView) findViewById(R.id.textAge);
         txtResult = (TextView) findViewById(R.id.txtResult);
-        listViewData = (ListView) findViewById(R.id.listViewData);
+        txtDate = (TextView)findViewById(R.id.txtDate);
+        //listViewData = (ListView) findViewById(R.id.listViewData);
+        linearData = (LinearLayout)findViewById(R.id.linearData);
         processData();
     }
+
+    private void getUserData(String strId) {
+        FileStorage fileStorage;
+        try{
+            fileStorage = new FileStorage(this);
+            userData = fileStorage.getUserDataById(strId);
+            userData.showDataFull();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     private void processData() {
         txtName.setText("Name: " + userData.getStrName());
         txtAge.setText("Age: " + userData.getIntAge());
+        txtDate.setText("Date: "+userData.getDate());
         String strResult = "NEGATIVE";
         if (userData.getIntResult() > -1)
             strResult = "POSITIVE";
@@ -56,19 +75,32 @@ public class DataView extends AppCompatActivity {
         try {
             fileStorage = new FileStorage(getApplicationContext());
             arrQuestion = fileStorage.GetQuestions();
-            ArrayList<String> arrListData = new ArrayList<>();
+            //ArrayList<String> arrListData = new ArrayList<>();
             int intCount = 0;
+
             for (Question question : arrQuestion) {
                 Log.e("DATAVIEW", question.getStrQuestion());
                 String arrAnswer[] = question.getArrAnswer();
                 int intIndex = arrIntData.get(intCount);
-                String strBuilder = (intCount + 1) + ".  " + question.getStrQuestion() + "\n    " + arrAnswer[intIndex-1];
-                arrListData.add(strBuilder);
-                Log.e("DataView", "data: " + strBuilder);
+                View viewToLoad = LayoutInflater.from(
+                        getApplicationContext()).inflate(
+                        R.layout.data_item, null);
+                //String strBuilder = (intCount + 1) + ".  " + question.getStrQuestion() + "\n    " + arrAnswer[intIndex-1];
+                //arrListData.add(strBuilder);
+                //Log.e("DataView", "data: " + strBuilder);
+                TextView txtCount = (TextView)viewToLoad.findViewById(R.id.txtCount);
+                TextView txtQuestion = (TextView)viewToLoad.findViewById(R.id.txtQuestion);
+                TextView txtAnswer = (TextView)viewToLoad.findViewById(R.id.txtAnswer);
+                txtCount.setText((intCount + 1) + ".  ");
+                txtQuestion.setText(question.getStrQuestion());
+                txtAnswer.setText(arrAnswer[intIndex-1]);
                 intCount++;
+                linearData.addView(viewToLoad);
             }
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, arrListData);
-            listViewData.setAdapter(arrayAdapter);
+            //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, arrListData);
+            //listViewData.setAdapter(arrayAdapter);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

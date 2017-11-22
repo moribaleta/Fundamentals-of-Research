@@ -33,37 +33,20 @@
                     android:text="Name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtName"
+                    android:id="@+id/textName"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/editName"
-                    android:hint="Name"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:text="Age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtAge"
+                    android:id="@+id/textAge"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:textSize="18sp" />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:id="@+id/editAge"
-                    android:hint="Age"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
             </LinearLayout>
 
             <Button

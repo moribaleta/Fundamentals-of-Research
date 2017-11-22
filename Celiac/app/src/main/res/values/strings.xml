@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Celiac</string>
+    <string name="title_activity_user_view">UserView</string>
 </resources>

@@ -1,21 +1,38 @@
 package xyz.ceberus.celiac;
 
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * Created by Eli on 11/3/2017.
  */
 
 public class UserData {
-
+    public String strUserId;
     public String strDataset;
     public String strName;
+    public String strDate;
     public int intAge;
     public int intResult;
 
-    public UserData( String strDataset,String strName, int intAge){
-        this.strDataset = strDataset;
+
+    public UserData(){
+
+    }
+
+    public UserData(String strUserId, String strName, int intAge){
+        this.strUserId = strUserId;
         this.strName = strName;
         this.intAge = intAge;
     }
+
+    /*public UserData( String strDataset,String strName, int intAge){
+        this.strDataset = strDataset;
+        this.strName = strName;
+        this.intAge = intAge;
+    }*/
 
     public UserData( String strDataset,String strName, int intAge, int intResult){
         this.strDataset = strDataset;
@@ -24,6 +41,12 @@ public class UserData {
         this.intResult = intResult;
     }
 
+    public void setStrUserId(String strUserId){
+        this.strUserId = strUserId;
+    }
+    public String getStrUserId(){
+        return  strUserId;
+    }
     public void setStrDataset(String strDataset){
         this.strDataset = strDataset;
     }
@@ -49,4 +72,24 @@ public class UserData {
     }
 
     public int getIntResult(){return intResult;}
+
+    public void showData() {
+        Log.e("UserData","id: "+strUserId+" name: "+strName+" age: "+intAge);
+    }
+
+    public void showDataFull() {
+        Log.e("UserData","id: "+strUserId+" name: "+strName+" age: "+intAge+" dataset:"+strDataset+" result:"+intResult);
+    }
+
+    public void setDate(){
+        this.strDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+    }
+
+    public String getDate(){
+        return strDate;
+    }
+
+    public void setDate(String strDate) {
+        this.strDate = strDate;
+    }
 }

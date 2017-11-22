@@ -17,28 +17,44 @@ public class History extends AppCompatActivity {
     private static final String TAG = "History";
     ListView listView;
     ArrayList<UserData>arrUserData = new ArrayList<>();
+    UserData userData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("History");
+        Intent intent = getIntent();
+        String strName = intent.getStringExtra("NAME");
+        String strID = intent.getStringExtra("ID");
+        int intAge = Integer.parseInt(intent.getStringExtra("AGE"));
+        //Log.e("UserData","id: "+strID+" name: "+strName+" age: "+intAge);
+        userData = new UserData(strID, strName, intAge);
+        setTitle(strName);
+        //setTitle("History");
         listView = (ListView)findViewById(R.id.listView);
+        init();
+    }
+
+    public void init(){
         FileStorage fileStorage;
         try {
-            fileStorage = new FileStorage(getApplicationContext());
-            arrUserData = fileStorage.GetHistory();
+            fileStorage = new FileStorage(this);
+            arrUserData = fileStorage.GetHistory(userData);
             Log.e(TAG,"userdata: "+arrUserData.size());
             ArrayList<String>arrayList = new ArrayList<>();
             for(int i = 0; i<arrUserData.size(); i++){
-                arrayList.add((i+1)+". "+arrUserData.get(i).getStrName());
+                String strResult = "Negative";
+                if(arrUserData.get(i).getIntResult()==1){
+                    strResult = "Positive";
+                }
+                arrayList.add((i+1)+". "+strResult+" - "+arrUserData.get(i).getDate());
             }
-            ArrayAdapter<String>arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,arrayList);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,arrayList);
             listView.setAdapter(arrayAdapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                   openItem(i);
+                    openItem(i);
                 }
             });
         } catch (BrokenBarrierException e) {
@@ -46,17 +62,17 @@ public class History extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     public void openItem(int position){
         Log.e(TAG,"open item: "+position);
         Intent intent = new Intent(this,DataView.class);
         UserData userData = arrUserData.get(position);
-        intent.putExtra("NAME",userData.getStrName());
+        intent.putExtra("ID",userData.getStrUserId());
+        /*intent.putExtra("NAME",userData.getStrName());
         intent.putExtra("DATASET",userData.getDataSet());
         intent.putExtra("AGE",""+userData.getIntAge());
-        intent.putExtra("RESULT",""+userData.getIntResult());
+        intent.putExtra("RESULT",""+userData.getIntResult());*/
         startActivity(intent);
     }
 

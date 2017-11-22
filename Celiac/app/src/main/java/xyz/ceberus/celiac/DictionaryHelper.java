@@ -139,35 +139,6 @@ public class DictionaryHelper extends SQLiteOpenHelper {
         super.close();
     }
 
-    public ArrayList<UserData> getHistory() {
-        String sql = "SELECT * FROM HISTORY_TBL";
-        ArrayList<UserData> arrUserData = new ArrayList<>();
-        Log.v(TAG, sql);
-        Cursor c = dictionary.rawQuery(sql, null);
-        c.moveToFirst();
-        while (!c.isAfterLast()) {
-            // do something
-
-            String strName = c.getString(c.getColumnIndex("NAME"));
-            String strDataset = c.getString(c.getColumnIndex("DATASET"));
-            int intAge = c.getInt(c.getColumnIndex("AGE"));
-            int intResult = c.getInt(c.getColumnIndex("RESULT"));
-            UserData userData = new UserData(strDataset, strName, intAge, intResult);
-            arrUserData.add(userData);
-            c.moveToNext();
-        }
-        c.close();
-        return arrUserData;
-    }
-
-    public void InsertData(UserData userData) {
-        String sql = "INSERT INTO HISTORY_TBL(NAME,DATASET,AGE,RESULT) " +
-                "values ('" + userData.getStrName() + "','" + userData.getDataSet() + "'" +
-                "," + userData.getIntAge() + "" +
-                "," + userData.getIntResult() + ")";
-        dictionary.execSQL(sql);
-    }
-
     public ArrayList<Question> getQuestion() {
         ArrayList<Question> arrQuestion = new ArrayList<>();
         String sql = "SELECT * FROM SURVEY_TBL";
@@ -184,5 +155,109 @@ public class DictionaryHelper extends SQLiteOpenHelper {
         }
         c.close();
         return arrQuestion;
+    }
+
+    public void createUser(UserData userData) {
+        String sql = "insert into USER_TBL(NAME,AGE)values('" + userData.getStrName() + "','" + userData.getIntAge() + "')";
+        dictionary.execSQL(sql);
+    }
+
+    public void insertUserDataHistory(UserData userData) {
+
+        String sql = "insert into HISTORY_TBL(USERID,DATASET,RESULT,DATE)" +
+                "values(" + userData.getStrUserId() + ",'" + userData.getDataSet() + "'," + userData.getIntResult() + ",'" + userData.getDate() + "')";
+        dictionary.execSQL(sql);
+    }
+
+    public ArrayList<UserData> getUserdata() {
+        String sql = "SELECT * FROM USER_TBL";
+        ArrayList<UserData> arrUserData = new ArrayList<>();
+        Log.v(TAG, sql);
+        Cursor c = dictionary.rawQuery(sql, null);
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+            String strId = c.getString(c.getColumnIndex("ID"));
+            String strName = c.getString(c.getColumnIndex("NAME"));
+            int intAge = c.getInt(c.getColumnIndex("AGE"));
+            UserData userData = new UserData(strId, strName, intAge);
+            arrUserData.add(userData);
+            c.moveToNext();
+        }
+        c.close();
+        return arrUserData;
+    }
+
+
+    public ArrayList<UserData> getUserHistory(UserData userData) {
+        ArrayList<UserData> arrayList = new ArrayList<>();
+        String sql = "SELECT * FROM HISTORY_TBL WHERE USERID = '" + userData.getStrUserId() + "'";
+        Log.v(TAG, sql);
+        Cursor c = dictionary.rawQuery(sql, null);
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+            // do something
+            String strDataset = c.getString(c.getColumnIndex("DATASET"));
+            int intResult = c.getInt(c.getColumnIndex("RESULT"));
+            String strDate = c.getString(c.getColumnIndex("DATE"));
+            UserData userDataItem = new UserData(userData.strUserId, userData.strName, userData.intAge);
+            userDataItem.setDate(strDate);
+            userDataItem.setStrDataset(strDataset);
+            userDataItem.setIntResult(intResult);
+            userDataItem.showDataFull();
+            arrayList.add(userDataItem);
+            c.moveToNext();
+        }
+        c.close();
+        return arrayList;
+    }
+
+    public ArrayList<TrainingData> getTrainingData() {
+        String sql = "SELECT * FROM TRAINING_TBL";
+        ArrayList<TrainingData> arrTrainingData = new ArrayList<>();
+        Log.v(TAG, sql);
+        Cursor c = dictionary.rawQuery(sql, null);
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+            // do something
+            String strDataset = c.getString(c.getColumnIndex("DATASET"));
+            int intResult = c.getInt(c.getColumnIndex("RESULT"));
+            TrainingData trainingData = new TrainingData(strDataset, intResult);
+            arrTrainingData.add(trainingData);
+            c.moveToNext();
+        }
+        c.close();
+        return arrTrainingData;
+    }
+
+    public UserData getUserDataById(String strId) {
+        String sql = "select * from USER_TBL where ID='" + strId + "'";
+        Log.v(TAG, sql);
+        Cursor c = dictionary.rawQuery(sql, null);
+        c.moveToFirst();
+        String strName = c.getString(c.getColumnIndex("NAME"));
+        int intAge = c.getInt(c.getColumnIndex("AGE"));
+        UserData userData = new UserData(strId, strName, intAge);
+        return userData;
+    }
+
+    public UserData getData(UserData userData) {
+        UserData finalUserData = userData;
+        try {
+            String sql = "SELECT * FROM HISTORY_TBL where USERID = " + userData.strUserId + " ORDER BY ID DESC";
+            Log.v(TAG, sql);
+            Cursor c = dictionary.rawQuery(sql, null);
+            c.moveToFirst();
+            String strDataset = c.getString(c.getColumnIndex("DATASET"));
+            int intResult = c.getInt(c.getColumnIndex("RESULT"));
+            String strDate = c.getString(c.getColumnIndex("DATE"));
+            finalUserData.setDate(strDate);
+            finalUserData.setStrDataset(strDataset);
+            finalUserData.setIntResult(intResult);
+            c.close();
+            return finalUserData;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userData;
     }
 }

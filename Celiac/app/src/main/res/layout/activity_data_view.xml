@@ -10,35 +10,54 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="xyz.ceberus.celiac.DataView">
 
-    <TextView
-        android:text="TextView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtName"
-        android:textSize="18sp"
-        android:layout_marginBottom="10dp" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:text="Age"
-        android:layout_below="@+id/txtName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtAge"
-        android:textSize="18sp"
-        android:layout_marginBottom="10dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/linearData">
 
-    <TextView
-        android:text="Result"
-        android:layout_below="@+id/txtAge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtResult"
-        android:textSize="18sp"
-        android:layout_marginBottom="10dp" />
+            <TextView
+                android:text="Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textName"
+                android:textSize="18sp"
+                android:layout_marginBottom="10dp" />
 
-    <ListView
-        android:layout_below="@+id/txtResult"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listViewData" />
+            <TextView
+                android:text="Age"
+                android:layout_below="@+id/textName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textAge"
+                android:textSize="18sp"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:text="Result"
+                android:layout_below="@+id/textAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtResult"
+                android:textSize="18sp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="Date"
+                android:layout_below="@+id/txtResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtDate"
+                android:textSize="18sp"
+                android:layout_weight="1"
+                android:layout_marginBottom="10dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

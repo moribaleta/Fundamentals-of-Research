@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,11 +21,12 @@ import java.util.ArrayList;
 
 public class Test extends AppCompatActivity {
     LinearLayout linearLayoutQuestion;
-    EditText editName,editAge;
+    TextView txtName, txtAge;
     Button btnSubmit;
     ArrayList<Question>arrayListQuestion = new ArrayList<>();
     int arrIntAnswer[] = new int[16];
     int intCount = 0;
+    UserData userData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +34,8 @@ public class Test extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Test");
         linearLayoutQuestion = (LinearLayout)findViewById(R.id.linearQuestion);
-        editName = (EditText)findViewById(R.id.editName);
-        editAge = (EditText)findViewById(R.id.editAge);
+        txtName = (TextView)findViewById(R.id.textName);
+        txtAge = (TextView)findViewById(R.id.textAge);
         btnSubmit = (Button)findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +43,19 @@ public class Test extends AppCompatActivity {
                 submit();
             }
         });
+        try {
+            Intent intent = getIntent();
+
+            String strName = intent.getStringExtra("NAME");
+            String strID = intent.getStringExtra("ID");
+            int intAge = Integer.parseInt(intent.getStringExtra("AGE"));
+            //Log.e("UserData","id: "+strID+" name: "+strName+" age: "+intAge);
+            userData = new UserData(strID, strName, intAge);
+            txtName.setText(userData.getStrName());
+            txtAge.setText("Age: "+userData.getIntAge()+"");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         init();
     }
 
@@ -96,8 +109,8 @@ public class Test extends AppCompatActivity {
         FileStorage fileStorage;
         try {
             fileStorage = new FileStorage(getBaseContext());
-            String strName = editName.getText().toString();
-            final int intAge =  Integer.parseInt(editAge.getText().toString());
+            String strName = userData.getStrName();
+            int intAge =  userData.getIntAge();
             if(intAge>=16) {
                 String strAnswer = "";
                 for (int intAnswer : arrIntAnswer) {
@@ -105,10 +118,11 @@ public class Test extends AppCompatActivity {
                 }
                 strAnswer = strAnswer.substring(0, strAnswer.length() - 1);
                 Log.e("Test", "userdata: " + strAnswer + " , " + strName + " , " + intAge);
-                final UserData userData = new UserData(strAnswer, strName, intAge, -1);
+                //final UserData userData = new UserData(strAnswer, strName, intAge, -1);
+                userData.setStrDataset(strAnswer);
                 UserData userDataResult = generateResult(userData);
-
-                fileStorage.InsertData(userDataResult);
+                userDataResult.setDate();
+                fileStorage.insertUserHistory(userDataResult);
 
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -121,10 +135,12 @@ public class Test extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(Test.this,DataView.class);
-                                intent.putExtra("NAME",userData.getStrName());
+                                intent.putExtra("ID",userData.getStrUserId());
+                                /*intent.putExtra("NAME",userData.getStrName());
                                 intent.putExtra("DATASET",userData.getDataSet());
                                 intent.putExtra("AGE",""+userData.getIntAge());
                                 intent.putExtra("RESULT",""+userData.getIntResult());
+                                intent.putExtra("DATE",userData.getDate());*/
                                 startActivity(intent);
                                 finish();
                             }
@@ -154,19 +170,19 @@ public class Test extends AppCompatActivity {
     }
 
     private UserData generateResult(UserData userData) {
+        userData.showDataFull();
         FileStorage fileStorage;
         try{
             fileStorage = new FileStorage(this);
-            ArrayList<UserData>arrUserData = fileStorage.GetHistory();
+            ArrayList<TrainingData>arrTrainingData = fileStorage.GetTraining();
             String strBuilder = "";
-            for(UserData userDataRow: arrUserData){
-                strBuilder += userDataRow.getDataSet()+"|"+userDataRow.getIntResult()+"\n";
+            for(TrainingData trainingDataRow: arrTrainingData){
+                strBuilder += trainingDataRow.getStrDataSet()+"|"+trainingDataRow.getIntResult()+"\n";
             }
             strBuilder = strBuilder.substring(0,strBuilder.length()-1);
             Log.e("Test","Traindata: "+strBuilder);
-            Adaboost boosting2 = Adaboost.train(strBuilder, 10, 10, 0);
-            int output = boosting2.classify(userData.getDataSet().split("\\|"));
-            //int label = boosting2.classify(strSample.split("\\|"));
+            Adaboost boosting = Adaboost.train(strBuilder, 10, 10, 0);
+            int output = boosting.classify(userData.getDataSet().split("\\|"));
             Log.e("Test","Result Data Label: "+userData.getDataSet()+" res: "+output);
             userData.setIntResult(output);
             return userData;

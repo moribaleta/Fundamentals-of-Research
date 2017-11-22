@@ -20,11 +20,25 @@ public class FileStorage {
         dictionary.open();
     }
 
-    public ArrayList<UserData> GetHistory() {
-        ArrayList<UserData> arrayList = dictionary.getHistory();
+    public ArrayList<UserData> GetUser(){
+        ArrayList<UserData>arrayList = dictionary.getUserdata();
+        //arrayList = GetHistory(arrayList);
+        dictionary.close();
+        return  arrayList;
+    }
+
+    public ArrayList<UserData> GetHistory(UserData userData) {
+        ArrayList<UserData>arrayList = dictionary.getUserHistory(userData);
         dictionary.close();
         return arrayList;
     }
+
+    public ArrayList<TrainingData>GetTraining(){
+        ArrayList<TrainingData>arrTrainingData = dictionary.getTrainingData();
+        dictionary.close();
+        return arrTrainingData;
+    }
+
 
     public ArrayList<Question> GetQuestions(){
         ArrayList<Question> arrayList = dictionary.getQuestion();
@@ -32,9 +46,21 @@ public class FileStorage {
         return arrayList;
     }
 
-    public void InsertData(UserData userData) {
-        dictionary.InsertData(userData);
+
+    public void createUser(UserData userData) {
+        dictionary.createUser(userData);
         dictionary.close();
     }
 
+    public void insertUserHistory(UserData userData){
+        dictionary.insertUserDataHistory(userData);
+        dictionary.close();
+    }
+
+    public UserData getUserDataById(String strId){
+        UserData userData = dictionary.getUserDataById(strId);
+        userData = dictionary.getData(userData);
+        dictionary.close();
+        return userData;
+    }
 }
