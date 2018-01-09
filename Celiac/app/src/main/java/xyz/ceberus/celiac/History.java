@@ -37,6 +37,8 @@ public class History extends AppCompatActivity {
 
     public void init(){
         FileStorage fileStorage;
+        String  strMonth[] = {"Jan","Feb","March","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+
         try {
             fileStorage = new FileStorage(this);
             arrUserData = fileStorage.GetHistory(userData);
@@ -47,7 +49,21 @@ public class History extends AppCompatActivity {
                 if(arrUserData.get(i).getIntResult()==1){
                     strResult = "Positive";
                 }
-                arrayList.add((i+1)+". "+strResult+" - "+arrUserData.get(i).getDate());
+                String strDate = arrUserData.get(i).getDate();
+                String strTime = strDate.split(" ")[1];
+                String strAmPm = strDate.split(" ")[2];
+                strDate = strDate.split(" ")[0];
+                String strDateSegment[] = strDate.split("-");
+                String strTimeSegment[] = strTime.split(":");
+                String strBuilder = "";
+                try{
+                    strBuilder = strMonth[Integer.parseInt(strDateSegment[1])-1] + ", "+ strDateSegment[2]+", "+strDateSegment[0]+" - "+strTimeSegment[0]+":"+strTimeSegment[1]+" "+strAmPm;
+                }catch(Exception e){
+                    Log.e("History","date: "+strDate);
+                    e.printStackTrace();
+                    strBuilder = strMonth[Integer.parseInt(strDateSegment[1])-1] + ", "+ strDateSegment[2]+", "+strDateSegment[0]+" - "+strTimeSegment[0]+":"+strTimeSegment[1];
+                }
+                arrayList.add("\t"+(i+1)+". "+strResult+" - "+strBuilder);
             }
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,arrayList);
             listView.setAdapter(arrayAdapter);
@@ -69,6 +85,7 @@ public class History extends AppCompatActivity {
         Intent intent = new Intent(this,DataView.class);
         UserData userData = arrUserData.get(position);
         intent.putExtra("ID",userData.getStrUserId());
+        intent.putExtra("POSITION",position);
         /*intent.putExtra("NAME",userData.getStrName());
         intent.putExtra("DATASET",userData.getDataSet());
         intent.putExtra("AGE",""+userData.getIntAge());

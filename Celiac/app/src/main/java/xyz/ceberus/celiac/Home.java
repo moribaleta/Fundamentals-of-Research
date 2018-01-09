@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -40,6 +42,27 @@ public class Home extends AppCompatActivity {
             }
         });
         getTraining();
+
+        btnTest.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.clockwise);
+                btnTest.startAnimation(animation);
+                return true;
+            }
+        });
+
+        btnHistory.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.clockwise);
+                btnHistory.startAnimation(animation);
+                return true;
+            }
+        });
+
     }
 
     public void openTest(View v){

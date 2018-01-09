@@ -15,14 +15,26 @@
     android:layout_centerInParent="true"
     android:background="@android:color/holo_blue_dark">
 
+    <Button
+        android:text="About"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnAbout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/transparent"
+        android:textColor="?android:attr/textColorPrimaryInverse" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:foregroundGravity="center_vertical">
+        android:foregroundGravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
-        <TextView
+        <!--<TextView
             android:text="Cdiag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +45,23 @@
             android:gravity="center_horizontal"
             android:layout_alignParentStart="true"
             android:layout_above="@+id/linearLayout"
-            android:layout_marginTop="50dp" />
+            android:layout_marginTop="50dp"
+            android:textAlignment="center" />-->
+
+        <!-- <TextView
+            android:text="Celiac disease diagnosing Application"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light" />-->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:srcCompat="@drawable/mainmenu"
+            android:id="@+id/imageView2"
+            android:layout_weight="0.5" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -64,16 +92,33 @@
                 android:background="@color/transparent" />
 
         </LinearLayout>
-    </LinearLayout>
 
-    <Button
-        android:text="About"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnAbout"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:background="@color/transparent"
-        android:textColor="?android:attr/textColorPrimaryInverse" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textColor="@android:color/background_light" />
+
+            <TextView
+                android:text="History"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

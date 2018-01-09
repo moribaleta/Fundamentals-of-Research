@@ -1,20 +1,19 @@
 package xyz.ceberus.celiac;
 
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ public class UserView extends AppCompatActivity {
     String strIntentSend;
     ArrayList<UserData>arrUserData = new ArrayList<>();
     Boolean blTest =false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +54,47 @@ public class UserView extends AppCompatActivity {
     }
     EditText inputName;
     EditText inputAge;
-
+    Button btnProceed;
+    Button btnCancel;
     private void createUser() {
         userData = new UserData();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.alert_dialog_user);
+        dialog.setTitle("Add User");
+        inputName = (EditText)dialog.findViewById(R.id.editName);
+        inputAge = (EditText)dialog.findViewById(R.id.editAge);
+        btnCancel = (Button)dialog.findViewById(R.id.btnCancel);
+        btnProceed = (Button)dialog.findViewById(R.id.btnProceed);
+        btnProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userData.setStrName(inputName.getText().toString());
+                userData.setIntAge(Integer.parseInt(inputAge.getText().toString()));
+                if(userData.getIntAge()>=16) {
+                    saveUser(userData);
+                    Log.e("USERDATA", "name: " + userData.getStrName() + " age: " + userData.getIntAge());
+                    Intent intent = getIntent();
+                    intent.putExtra("Test", strIntentSend);
+                    finish();
+                    startActivity(intent);
+                }else{
+                    Snackbar snackbar = Snackbar
+                            .make(listViewUser, "User must be 14 or above", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+
+
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add User");
 
 // Set up the input
@@ -95,7 +132,7 @@ public class UserView extends AppCompatActivity {
             }
         });
 
-        builder.show();
+        builder.show();*/
     }
 
     private void saveUser(UserData userData) {
@@ -115,7 +152,7 @@ public class UserView extends AppCompatActivity {
                 ArrayList<String> arrStrUser = new ArrayList<>();
                 int intCount = 1;
                 for (UserData userData : arrUserData) {
-                    arrStrUser.add(intCount + ". " + userData.getStrName());
+                    arrStrUser.add("\t"+intCount + ". " + userData.getStrName());
                     intCount++;
                 }
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrStrUser);

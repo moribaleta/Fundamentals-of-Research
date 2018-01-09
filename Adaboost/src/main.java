@@ -27,6 +27,9 @@ public class main {
 			String strSample = "1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1";
 			int label = boosting2.classify(strSample.split("\\|"));
 			System.out.println("v2 Data Label"+strSample+" = "+label);
+			SimpleClassifier sc = new SimpleClassifier();
+			int intType = sc.ClassifyType(strSample);
+			System.out.println("type: "+intType);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

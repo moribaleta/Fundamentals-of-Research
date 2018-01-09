@@ -1,10 +1,10 @@
 package xyz.ceberus.celiac;
 
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,26 +17,37 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.ArrayList;
 
 public class Test extends AppCompatActivity {
     LinearLayout linearLayoutQuestion;
     TextView txtName, txtAge;
     Button btnSubmit;
-    ArrayList<Question>arrayListQuestion = new ArrayList<>();
+    ArrayList<Question> arrayListQuestion = new ArrayList<>();
     int arrIntAnswer[] = new int[16];
     int intCount = 0;
     UserData userData;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Test");
-        linearLayoutQuestion = (LinearLayout)findViewById(R.id.linearQuestion);
-        txtName = (TextView)findViewById(R.id.textName);
-        txtAge = (TextView)findViewById(R.id.textAge);
-        btnSubmit = (Button)findViewById(R.id.btnSubmit);
+        linearLayoutQuestion = (LinearLayout) findViewById(R.id.linearQuestion);
+        txtName = (TextView) findViewById(R.id.textName);
+        txtAge = (TextView) findViewById(R.id.textAge);
+        btnSubmit = (Button) findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,44 +63,50 @@ public class Test extends AppCompatActivity {
             //Log.e("UserData","id: "+strID+" name: "+strName+" age: "+intAge);
             userData = new UserData(strID, strName, intAge);
             txtName.setText(userData.getStrName());
-            txtAge.setText("Age: "+userData.getIntAge()+"");
-        }catch (Exception e){
+            txtAge.setText("Age: " + userData.getIntAge() + "");
+        } catch (Exception e) {
             e.printStackTrace();
         }
         init();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    void init(){
+    void init() {
         FileStorage fileStorage;
         try {
             fileStorage = new FileStorage(getBaseContext());
             arrayListQuestion = fileStorage.GetQuestions();
             initListData();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    void initListData(){
+    void initListData() {
 
-        for(final Question question: arrayListQuestion) {
+        for (final Question question : arrayListQuestion) {
             View viewToLoad = LayoutInflater.from(
                     getApplicationContext()).inflate(
                     R.layout.test_item, null);
-            TextView textView = (TextView)viewToLoad.findViewById(R.id.txtQuestion);
-            textView.setText((intCount+1)+". "+question.getStrQuestion());
-            Spinner spinner = (Spinner)viewToLoad.findViewById(R.id.spnAnswer);
+            TextView textViewCount = (TextView) viewToLoad.findViewById(R.id.textCount);
+            TextView textView = (TextView) viewToLoad.findViewById(R.id.txtQuestion);
+            textViewCount.setText((intCount + 1) + ". ");
+            textView.setText(question.getStrQuestion());
+            Spinner spinner = (Spinner) viewToLoad.findViewById(R.id.spnAnswer);
             String arrStrAnswer[] = question.getArrAnswer();
-            ArrayAdapter<String>arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,arrStrAnswer);
-            arrayAdapter.setDropDownViewResource(android.R.layout
-                    .simple_spinner_dropdown_item);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_text_view, arrStrAnswer);
+            arrayAdapter.setDropDownViewResource(R.layout.spinner_text_view);
             spinner.setAdapter(arrayAdapter);
+           /* TextView tv = (TextView) spinner.getSelectedView();
+            tv.setTextColor(Color.BLACK);*/
             final int index = intCount;
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    arrIntAnswer[index] = i+1;
-                    Log.e("Test",question.getStrQuestion()+" : "+arrIntAnswer[index]);
+                    arrIntAnswer[index] = i + 1;
+                    Log.e("Test", question.getStrQuestion() + " : " + arrIntAnswer[index]);
                 }
 
                 @Override
@@ -105,66 +122,59 @@ public class Test extends AppCompatActivity {
 
     }
 
-    void submit(){
-        FileStorage fileStorage;
+    void submit() {
+        final FileStorage fileStorage;
         try {
             fileStorage = new FileStorage(getBaseContext());
             String strName = userData.getStrName();
-            int intAge =  userData.getIntAge();
-            if(intAge>=16) {
-                String strAnswer = "";
-                for (int intAnswer : arrIntAnswer) {
-                    strAnswer += intAnswer + "|";
-                }
-                strAnswer = strAnswer.substring(0, strAnswer.length() - 1);
-                Log.e("Test", "userdata: " + strAnswer + " , " + strName + " , " + intAge);
-                //final UserData userData = new UserData(strAnswer, strName, intAge, -1);
-                userData.setStrDataset(strAnswer);
-                UserData userDataResult = generateResult(userData);
-                userDataResult.setDate();
-                fileStorage.insertUserHistory(userDataResult);
+            int intAge = userData.getIntAge();
 
-                AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-                } else {
-                    builder = new AlertDialog.Builder(this);
-                }
-                builder.setTitle("Success!")
-                        .setMessage("We will now generate the result")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Test.this,DataView.class);
-                                intent.putExtra("ID",userData.getStrUserId());
-                                /*intent.putExtra("NAME",userData.getStrName());
-                                intent.putExtra("DATASET",userData.getDataSet());
-                                intent.putExtra("AGE",""+userData.getIntAge());
-                                intent.putExtra("RESULT",""+userData.getIntResult());
-                                intent.putExtra("DATE",userData.getDate());*/
-                                startActivity(intent);
-                                finish();
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }else{
-                AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-                } else {
-                    builder = new AlertDialog.Builder(this);
-                }
-                builder.setTitle("Ooops!")
-                        .setMessage("Age must be 16 above")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+            String strAnswer = "";
+            for (int intAnswer : arrIntAnswer) {
+                strAnswer += intAnswer + "|";
             }
-        }catch (Exception e){
+            strAnswer = strAnswer.substring(0, strAnswer.length() - 1);
+            Log.e("Test", "userdata: " + strAnswer + " , " + strName + " , " + intAge);
+            //final UserData userData = new UserData(strAnswer, strName, intAge, -1);
+
+            final ProgressDialog dialog = ProgressDialog.show(this, "",
+                    "Loading. Please wait...", true);
+            final String finalStrAnswer = strAnswer;
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    userData.setStrDataset(finalStrAnswer);
+
+                    UserData userDataResult = generateResult(userData);
+                    userDataResult.setDate();
+                    fileStorage.insertUserHistory(userDataResult);
+                    dialog.dismiss();
+                    Snackbar snackbar = Snackbar
+                            .make(linearLayoutQuestion, "Process complete", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    snackbar.addCallback(new Snackbar.Callback() {
+
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            Intent intent = new Intent(Test.this, DataView.class);
+                            intent.putExtra("ID", userData.getStrUserId());
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onShown(Snackbar snackbar) {
+
+                        }
+                    });
+
+                }
+            };
+
+            thread.start();
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -172,23 +182,23 @@ public class Test extends AppCompatActivity {
     private UserData generateResult(UserData userData) {
         userData.showDataFull();
         FileStorage fileStorage;
-        try{
+        try {
             fileStorage = new FileStorage(this);
-            ArrayList<TrainingData>arrTrainingData = fileStorage.GetTraining();
+            ArrayList<TrainingData> arrTrainingData = fileStorage.GetTraining();
             String strBuilder = "";
-            for(TrainingData trainingDataRow: arrTrainingData){
-                strBuilder += trainingDataRow.getStrDataSet()+"|"+trainingDataRow.getIntResult()+"\n";
+            for (TrainingData trainingDataRow : arrTrainingData) {
+                strBuilder += trainingDataRow.getStrDataSet() + "|" + trainingDataRow.getIntResult() + "\n";
             }
-            strBuilder = strBuilder.substring(0,strBuilder.length()-1);
-            Log.e("Test","Traindata: "+strBuilder);
+            strBuilder = strBuilder.substring(0, strBuilder.length() - 1);
+            Log.e("Test", "Traindata: " + strBuilder);
             Adaboost boosting = Adaboost.train(strBuilder, 10, 10, 0);
             int output = boosting.classify(userData.getDataSet().split("\\|"));
-            Log.e("Test","Result Data Label: "+userData.getDataSet()+" res: "+output);
+            Log.e("Test", "Result Data Label: " + userData.getDataSet() + " res: " + output);
             userData.setIntResult(output);
             return userData;
             //System.out.println("v2 Data Label"+strSample+" = "+label);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return userData;
@@ -202,5 +212,41 @@ public class Test extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Test Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }

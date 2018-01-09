@@ -82,7 +82,7 @@ public class UserData {
     }
 
     public void setDate(){
-        this.strDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        this.strDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a").format(Calendar.getInstance().getTime());
     }
 
     public String getDate(){

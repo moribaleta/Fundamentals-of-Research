@@ -2,12 +2,15 @@ package xyz.ceberus.celiac;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,9 +19,11 @@ public class DataView extends AppCompatActivity {
     UserData userData;
     TextView txtName, txtAge, txtResult,txtDate;
     //ListView listViewData;
-    LinearLayout linearData;
+    LinearLayout linearData,linearTest;
     ArrayList<Question> arrQuestion = new ArrayList<>();
-
+    Button btnShow;
+    Boolean blShow = true;
+    ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,14 +36,63 @@ public class DataView extends AppCompatActivity {
         int intResult = Integer.parseInt(intent.getStringExtra("RESULT"));*/
         /*userData = new UserData(strDataSet, strName, intAge, intResult);*/
         String strId = intent.getStringExtra("ID");
-        getUserData(strId);
+        int intPosition = intent.getIntExtra("POSITION",-1);
+        if(intPosition!=-1){
+            getUserDataByPosition(strId,intPosition);
+        }else{
+            getUserData(strId);
+        }
+
         txtName = (TextView) findViewById(R.id.textName);
         txtAge = (TextView) findViewById(R.id.textAge);
         txtResult = (TextView) findViewById(R.id.txtResult);
         txtDate = (TextView)findViewById(R.id.txtDate);
         //listViewData = (ListView) findViewById(R.id.listViewData);
         linearData = (LinearLayout)findViewById(R.id.linearData);
+        linearTest = (LinearLayout)findViewById(R.id.linearTest);
+        btnShow = (Button)findViewById(R.id.btnShow);
+        scrollView = (ScrollView)findViewById(R.id.scrollView);
+
+
+        btnShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(blShow){
+                    btnShow.setText("HIDE TEST");
+                    linearTest.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            scrollView.post(new Runnable() {
+                                public void run() {
+                                    scrollView.smoothScrollTo(0, btnShow.getBottom());
+                                }
+                            });
+                        }
+                    },200);
+                }else{
+                    btnShow.setText("SHOW TEST");
+                    linearTest.setVisibility(View.GONE);
+                }
+                blShow = !blShow;
+
+            }
+        });
         processData();
+    }
+
+    private void getUserDataByPosition(String strId, int intPosition) {
+        FileStorage fileStorage;
+        try{
+            fileStorage = new FileStorage(this);
+            userData = fileStorage.getUserDataById(strId);
+            fileStorage = new FileStorage(this);
+            ArrayList<UserData>arrUserData = fileStorage.GetHistory(userData);
+            this.userData = arrUserData.get(intPosition);
+            userData.showDataFull();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void getUserData(String strId) {
@@ -57,10 +111,18 @@ public class DataView extends AppCompatActivity {
         txtName.setText("Name: " + userData.getStrName());
         txtAge.setText("Age: " + userData.getIntAge());
         txtDate.setText("Date: "+userData.getDate());
-        String strResult = "NEGATIVE";
-        if (userData.getIntResult() > -1)
-            strResult = "POSITIVE";
+        String strResult = "The result is Negative, Congratulations you are not diagnose of Celiac Disease";
+        Log.e("DATAVIEW","user result: "+userData.getIntResult());
+        if (userData.getIntResult() != -1)
+            strResult ="The result is Positive, we advice you to go to the Doctor " +
+                    "(Gastroenterologist) and show this result to confirm if you have Celiac Disease";
         txtResult.setText("Result: " + strResult);
+
+        if(userData.getIntResult()==1) {
+            CeliacType celiacType = new CeliacType();
+            int intType = celiacType.TestResult(userData.getDataSet());
+            txtResult.append("\nCeliac Type: " + intType);
+        }
         String strData = userData.getDataSet();
         strData = strData.replace("|",",");
         //int arrIntData[] = new int[10];
@@ -95,7 +157,7 @@ public class DataView extends AppCompatActivity {
                 txtQuestion.setText(question.getStrQuestion());
                 txtAnswer.setText(arrAnswer[intIndex-1]);
                 intCount++;
-                linearData.addView(viewToLoad);
+                linearTest.addView(viewToLoad);
             }
             //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, arrListData);
             //listViewData.setAdapter(arrayAdapter);

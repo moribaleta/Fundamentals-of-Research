@@ -6,11 +6,8 @@
     android:id="@+id/activity_test"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="xyz.ceberus.celiac.Test">
+    tools:context="xyz.ceberus.celiac.Test"
+    android:background="#FAFAFA">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,7 +16,8 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -29,23 +27,41 @@
                 android:layout_centerHorizontal="true"
                 android:id="@+id/linearQuestion">
 
-                <TextView
-                    android:text="Name"
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textName"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textSize="18sp" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/box"
+                    android:elevation="2dp"
+                    android:layout_margin="10dp"
+                    android:id="@+id/linearHeader"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
-                <TextView
-                    android:text="Age"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textAge"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textSize="18sp" />
+                    <TextView
+                        android:text="Name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textName"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <TextView
+                        android:text="Age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textAge"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="?android:attr/textColorPrimary" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -54,7 +70,10 @@
                 android:layout_below="@+id/linearQuestion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnSubmit" />
+                android:id="@+id/btnSubmit"
+                android:layout_margin="10dp"
+                android:background="@drawable/box_button"
+                android:textColor="?android:attr/textColorPrimaryInverse" />
 
         </LinearLayout>
     </ScrollView>
