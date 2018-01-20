@@ -208,6 +208,12 @@ public class Test extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(Test.this, History.class);
+            userData.showData();
+            intent.putExtra("ID", userData.getStrUserId());
+            intent.putExtra("NAME", userData.getStrName());
+            intent.putExtra("AGE", userData.getIntAge() + "");
+            startActivity(intent);
             finish(); // close this activity and return to preview activity (if there is any)
         }
 

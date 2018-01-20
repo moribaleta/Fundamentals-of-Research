@@ -85,13 +85,13 @@
             </LinearLayout>
 
             <Button
-                android:text="show test"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnShow"
-                android:layout_margin="10dp"
-                android:background="@drawable/box_button"
-                android:textColor="@android:color/background_light" />
+            android:text="show test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnShow"
+            android:layout_margin="10dp"
+            android:background="@drawable/box_button"
+            android:textColor="@android:color/background_light" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -99,6 +99,15 @@
                 android:layout_height="match_parent"
                 android:id="@+id/linearTest"
                 android:visibility="gone"></LinearLayout>
+
+            <Button
+                android:text="print results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnPrint"
+                android:layout_margin="10dp"
+                android:background="@drawable/box_button"
+                android:textColor="@android:color/background_light" />
 
         </LinearLayout>
     </ScrollView>

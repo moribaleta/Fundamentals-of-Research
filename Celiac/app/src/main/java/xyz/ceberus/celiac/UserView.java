@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class UserView extends AppCompatActivity {
     String strIntentSend;
     ArrayList<UserData>arrUserData = new ArrayList<>();
     Boolean blTest =false;
+    TextView textViewNoUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class UserView extends AppCompatActivity {
                 createUser();
             }
         });
-
+        textViewNoUser = (TextView)findViewById(R.id.textViewItemNoneUser);
         listViewUser = (ListView)findViewById(R.id.listUser);
         init();
     }
@@ -160,7 +162,7 @@ public class UserView extends AppCompatActivity {
                 listViewUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if(blTest) {//test
+                        /*if(blTest) {//test
                             Intent intent = new Intent(UserView.this, Test.class);
                             UserData userData = arrUserData.get(i);
                             userData.showData();
@@ -168,7 +170,7 @@ public class UserView extends AppCompatActivity {
                             intent.putExtra("NAME", userData.getStrName());
                             intent.putExtra("AGE", userData.getIntAge() + "");
                             startActivity(intent);
-                        }else {//history
+                        }else {//history*/
                             Intent intent = new Intent(UserView.this, History.class);
                             UserData userData = arrUserData.get(i);
                             userData.showData();
@@ -176,9 +178,12 @@ public class UserView extends AppCompatActivity {
                             intent.putExtra("NAME", userData.getStrName());
                             intent.putExtra("AGE", userData.getIntAge() + "");
                             startActivity(intent);
-                        }
+                        //}
                     }
                 });
+                textViewNoUser.setVisibility(View.GONE);
+            }else{
+
             }
         }catch (Exception e){
             e.printStackTrace();

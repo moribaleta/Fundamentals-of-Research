@@ -33,12 +33,13 @@ public class Adaboost {
 			int maxIteration, double targetError) throws IOException {
 
 		int samplesCount = getTotalSamplesNumber(trainFile);
-		
+		System.out.println("sample count: "+samplesCount);
 		double[] weights = new double[samplesCount];
 		double[] aggClassEst = new double[samplesCount];
 		
 		for (int i = 0; i < weights.length; i++) {
 			weights[i] = ((double) 1 / samplesCount);
+			System.out.println("set init weight: "+weights[i]);
 			aggClassEst[i] = 0;
 		}
 
@@ -55,14 +56,14 @@ public class Adaboost {
 			BigDecimal alpha = BigDecimal.valueOf(0.5)
 					.multiply(BigDecimal.valueOf(Math.log(log.doubleValue())))
 					.setScale(12, BigDecimal.ROUND_HALF_UP);
-
+			System.out.println("set init Alpha:"+alpha);
 			stump.setAlpha(alpha);
 			model.add(stump);
 
 			weights = updateWeights(trainFile, labels, stump, weights,
 					aggClassEst, alpha.doubleValue());
 			double error = calculateError(aggClassEst, labels);
-
+			
 			if (error <= targetError)
 				break;
 		}
@@ -78,10 +79,13 @@ public class Adaboost {
 	public int classify(String[] Observation) {
 
 		BigDecimal sum = BigDecimal.ZERO;
+		int intStumpIndex = 0;
 		for (DecisionStump classifier : model) {
-
-			sum = sum.add(BigDecimal.valueOf(classifier.classify(Observation))
-					.multiply(classifier.getAlpha()));
+			BigDecimal output = BigDecimal.valueOf(classifier.classify(Observation));
+			sum = sum.add(output.multiply(classifier.getAlpha())
+					);
+			System.out.println("index stump: "+intStumpIndex+" output: "+output+" sum: "+sum+" alpha: "+classifier.getAlpha());
+			intStumpIndex++;
 		}
 
 		if (sum.compareTo(BigDecimal.ZERO) == 1)
@@ -144,6 +148,7 @@ public class Adaboost {
 			aggClassEst[i] += BigDecimal.valueOf(stump.getClassEst()[i])
 					.multiply(stump.getAlpha())
 					.setScale(8, BigDecimal.ROUND_HALF_UP).doubleValue();
+			
 			if (stump.getClassEst()[i] == labels[i]) {
 				weights[i] = BigDecimal
 						.valueOf(weights[i])
@@ -159,6 +164,7 @@ public class Adaboost {
 						.setScale(8, BigDecimal.ROUND_HALF_UP).doubleValue();
 
 			}
+			//System.out.println("weight of each index: "+i+" weight: "+weights[i]);
 		}
 
 		return normalizeWeights(weights);
@@ -229,6 +235,7 @@ public class Adaboost {
 		}
 
 		breader.close();
+		System.out.println("no of labels: "+i);
 		return labels;
 	}
 

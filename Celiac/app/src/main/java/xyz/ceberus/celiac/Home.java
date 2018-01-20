@@ -8,20 +8,19 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
 public class Home extends AppCompatActivity {
     Button  btnAbouts;
-    ImageButton btnTest, btnHistory;
+    Button btnTest; /*btnHistory*/;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getSupportActionBar().hide();
-        btnTest = (ImageButton)findViewById(R.id.btnTest);
-        btnHistory = (ImageButton)findViewById(R.id.btnHistory);
+        btnTest = (Button)findViewById(R.id.btnTest);
+        //btnHistory = (Button)findViewById(R.id.btnHistory);
         btnAbouts = (Button)findViewById(R.id.btnAbout);
         btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,12 +28,12 @@ public class Home extends AppCompatActivity {
                 openTest(view);
             }
         });
-        btnHistory.setOnClickListener(new View.OnClickListener() {
+       /* btnHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openHistory(view);
             }
-        });
+        });*/
         btnAbouts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +52,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        btnHistory.setOnLongClickListener(new View.OnLongClickListener() {
+       /* btnHistory.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
@@ -61,7 +60,7 @@ public class Home extends AppCompatActivity {
                 btnHistory.startAnimation(animation);
                 return true;
             }
-        });
+        });*/
 
     }
 

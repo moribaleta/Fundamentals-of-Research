@@ -22,6 +22,7 @@ public class DataView extends AppCompatActivity {
     LinearLayout linearData,linearTest;
     ArrayList<Question> arrQuestion = new ArrayList<>();
     Button btnShow;
+    Button btnPrint;
     Boolean blShow = true;
     ScrollView scrollView;
     @Override
@@ -51,6 +52,7 @@ public class DataView extends AppCompatActivity {
         linearData = (LinearLayout)findViewById(R.id.linearData);
         linearTest = (LinearLayout)findViewById(R.id.linearTest);
         btnShow = (Button)findViewById(R.id.btnShow);
+        btnPrint = (Button)findViewById(R.id.btnPrint);
         scrollView = (ScrollView)findViewById(R.id.scrollView);
 
 
@@ -76,6 +78,13 @@ public class DataView extends AppCompatActivity {
                 }
                 blShow = !blShow;
 
+            }
+        });
+
+        btnPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TestPrint(DataView.this).execute(userData);
             }
         });
         processData();
@@ -120,8 +129,15 @@ public class DataView extends AppCompatActivity {
 
         if(userData.getIntResult()==1) {
             CeliacType celiacType = new CeliacType();
-            int intType = celiacType.TestResult(userData.getDataSet());
-            txtResult.append("\nCeliac Type: " + intType);
+            String strType = celiacType.TestResult(userData.getDataSet())+"";
+            if(strType=="1"){
+                strType+= " silent";
+            }else if(strType=="2"){
+                strType+= " typical";
+            }else{
+                strType+= " atypical";
+            }
+            txtResult.append("\nCeliac Type: " + strType);
         }
         String strData = userData.getDataSet();
         strData = strData.replace("|",",");
@@ -174,6 +190,12 @@ public class DataView extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(DataView.this, History.class);
+            userData.showData();
+            intent.putExtra("ID", userData.getStrUserId());
+            intent.putExtra("NAME", userData.getStrName());
+            intent.putExtra("AGE", userData.getIntAge() + "");
+            startActivity(intent);
             finish(); // close this activity and return to preview activity (if there is any)
         }
 

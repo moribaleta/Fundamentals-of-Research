@@ -13,11 +13,13 @@ public class generateDataset {
 			fileReader = new FileReader("resources/dataset.csv");
 			buffReader = new BufferedReader(fileReader);
 			String strline;
+			int intLoop = 1;
 			while ((strline = buffReader.readLine()) != null) {
 				//System.out.println(strline);
 				String arrSplit[] = strline.split(",");
 				String strBuilder = "";
 				String strResult = "";
+				
 				for (String strItem : arrSplit) {
 					//System.out.println(strItem);
 					if (strItem.equals("yes") || strItem.equals("never")) {
@@ -40,8 +42,10 @@ public class generateDataset {
 					}
 				}
 				strBuilder = strBuilder.substring(0,strBuilder.length()-1);
-				String strSQL = "INSERT INTO TRAINING_TBL ('DATASET','RESULT') values ('"+strBuilder+"','"+strResult+"');";
+				//String strSQL = intLoop+" INSERT INTO TRAINING_TBL ('DATASET','RESULT') values ('"+strBuilder+"','"+strResult+"');";
+				String strSQL = strBuilder+"|"+strResult;
 				System.out.println(strSQL);
+				intLoop++;
 			}
 
 		} catch (SecurityException | IOException e) {

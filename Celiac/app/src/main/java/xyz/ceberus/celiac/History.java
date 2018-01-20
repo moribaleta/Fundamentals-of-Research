@@ -2,6 +2,7 @@ package xyz.ceberus.celiac;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -9,8 +10,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.BrokenBarrierException;
 
 public class History extends AppCompatActivity {
@@ -18,6 +21,8 @@ public class History extends AppCompatActivity {
     ListView listView;
     ArrayList<UserData>arrUserData = new ArrayList<>();
     UserData userData;
+    FloatingActionButton fabAddItem;
+    TextView textViewNoItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,21 @@ public class History extends AppCompatActivity {
         setTitle(strName);
         //setTitle("History");
         listView = (ListView)findViewById(R.id.listView);
+        fabAddItem = (FloatingActionButton)findViewById(R.id.fabAddTest);
+        fabAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(History.this, Test.class);
+                //UserData userData = arrUserData.get(i);
+                userData.showData();
+                intent.putExtra("ID", userData.getStrUserId());
+                intent.putExtra("NAME", userData.getStrName());
+                intent.putExtra("AGE", userData.getIntAge() + "");
+                startActivity(intent);
+                finish();
+            }
+        });
+        textViewNoItem = (TextView)findViewById(R.id.textViewItemNone);
         init();
     }
 
@@ -63,16 +83,21 @@ public class History extends AppCompatActivity {
                     e.printStackTrace();
                     strBuilder = strMonth[Integer.parseInt(strDateSegment[1])-1] + ", "+ strDateSegment[2]+", "+strDateSegment[0]+" - "+strTimeSegment[0]+":"+strTimeSegment[1];
                 }
-                arrayList.add("\t"+(i+1)+". "+strResult+" - "+strBuilder);
+                arrayList.add("\t"+(i+1)+". "+strBuilder+" - "+strResult);
             }
+            Collections.reverse(arrayList);
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,arrayList);
             listView.setAdapter(arrayAdapter);
+
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     openItem(i);
                 }
             });
+            if(arrayList.size()>0){
+                textViewNoItem.setVisibility(View.GONE);
+            }
         } catch (BrokenBarrierException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -91,6 +116,7 @@ public class History extends AppCompatActivity {
         intent.putExtra("AGE",""+userData.getIntAge());
         intent.putExtra("RESULT",""+userData.getIntResult());*/
         startActivity(intent);
+        finish();
     }
 
     @Override
