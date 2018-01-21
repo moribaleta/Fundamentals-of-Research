@@ -201,6 +201,17 @@ public class DataView extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public void onBackPressed() {
 
+        Intent intent = new Intent(DataView.this, History.class);
+        userData.showData();
+        intent.putExtra("ID", userData.getStrUserId());
+        intent.putExtra("NAME", userData.getStrName());
+        intent.putExtra("AGE", userData.getIntAge() + "");
+        startActivity(intent);
+        finish(); // close this activity and return to preview activity (if there is any)
+        super.onBackPressed();
+    }
 
 }

@@ -1,5 +1,7 @@
 package xyz.ceberus.celiac;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -76,10 +78,18 @@ public class Adaboost {
 	public int classify(String[] Observation) {
 
 		BigDecimal sum = BigDecimal.ZERO;
-		for (DecisionStump classifier : model) {
+		/*for (DecisionStump classifier : model) {
 
 			sum = sum.add(BigDecimal.valueOf(classifier.classify(Observation))
 					.multiply(classifier.getAlpha()));
+		}*/
+		int intStumpIndex = 0;
+		for (DecisionStump classifier : model) {
+			BigDecimal output = BigDecimal.valueOf(classifier.classify(Observation));
+			sum = sum.add(output.multiply(classifier.getAlpha())
+			);
+			Log.e("ADABOOST","index stump: "+intStumpIndex+" output: "+output+" sum: "+sum+" alpha: "+classifier.getAlpha());
+			intStumpIndex++;
 		}
 
 		if (sum.compareTo(BigDecimal.ZERO) == 1)

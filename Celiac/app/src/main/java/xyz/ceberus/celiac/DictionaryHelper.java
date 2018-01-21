@@ -149,7 +149,8 @@ public class DictionaryHelper extends SQLiteOpenHelper {
         while (!c.isAfterLast()) {
             String strQuestion = c.getString(c.getColumnIndex("QUESTION"));
             String strAnswer = c.getString(c.getColumnIndex("ANSWER"));
-            Question question = new Question(strQuestion, strAnswer);
+            String strInfo = c.getString(c.getColumnIndex("INFO"));
+            Question question = new Question(strQuestion, strAnswer,strInfo);
             arrQuestion.add(question);
             c.moveToNext();
         }

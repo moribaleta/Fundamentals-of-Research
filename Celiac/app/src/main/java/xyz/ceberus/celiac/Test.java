@@ -1,10 +1,12 @@
 package xyz.ceberus.celiac;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -92,6 +94,8 @@ public class Test extends AppCompatActivity {
                     R.layout.test_item, null);
             TextView textViewCount = (TextView) viewToLoad.findViewById(R.id.textCount);
             TextView textView = (TextView) viewToLoad.findViewById(R.id.txtQuestion);
+            TextView textMore = (TextView) viewToLoad.findViewById(R.id.textMore);
+
             textViewCount.setText((intCount + 1) + ". ");
             textView.setText(question.getStrQuestion());
             Spinner spinner = (Spinner) viewToLoad.findViewById(R.id.spnAnswer);
@@ -114,6 +118,56 @@ public class Test extends AppCompatActivity {
 
                 }
             });
+            if (question.getStrInfo() != null) {
+                textMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Test.this);
+// ...Irrelevant code for customizing the buttons and title
+                        dialogBuilder.setCancelable(true);
+                        dialogBuilder.setNegativeButton(
+                                "Close",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        LayoutInflater inflater = (Test.this).getLayoutInflater();
+                        View dialogView = inflater.inflate(R.layout.more_information, null);
+                        dialogBuilder.setView(dialogView);
+                        TextView textInfo = (TextView) dialogView.findViewById(R.id.textInfo);
+                        TextView textLink = (TextView) dialogView.findViewById(R.id.textLink);
+                        textInfo.setText(question.getStrInfo());
+                        textLink.setText(question.getStrLink());
+                        AlertDialog alertDialog = dialogBuilder.create();
+                        alertDialog.setTitle("More Information");
+                        alertDialog.show();
+                        Log.e("ALERT", "alert " + question.getStrInfo() + " - " + question.getStrLink());
+                       /* AlertDialog.Builder builder1 = new AlertDialog.Builder(Test.this);
+
+                        builder1.setMessage(question.getStrInfo()+"\n");
+                        builder1.setCancelable(true);
+                        builder1.setNegativeButton(
+                                "Close",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();*/
+
+
+                        /*TextView textInfo = (TextView) dialog.findViewById(R.id.textInfo);
+                        TextView textLink = (TextView) dialog.findViewById(R.id.textLink);
+                        textInfo.setText(question.getStrInfo());
+                        textLink.setText(question.getStrLink());*/
+                    }
+                });
+            } else {
+                textMore.setVisibility(View.GONE);
+            }
 
 
             intCount++;
@@ -191,7 +245,7 @@ public class Test extends AppCompatActivity {
             }
             strBuilder = strBuilder.substring(0, strBuilder.length() - 1);
             Log.e("Test", "Traindata: " + strBuilder);
-            Adaboost boosting = Adaboost.train(strBuilder, 10, 10, 0);
+            Adaboost boosting = Adaboost.train(strBuilder, 10, 20, 0);
             int output = boosting.classify(userData.getDataSet().split("\\|"));
             Log.e("Test", "Result Data Label: " + userData.getDataSet() + " res: " + output);
             userData.setIntResult(output);
@@ -218,6 +272,19 @@ public class Test extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(Test.this, History.class);
+        userData.showData();
+        intent.putExtra("ID", userData.getStrUserId());
+        intent.putExtra("NAME", userData.getStrName());
+        intent.putExtra("AGE", userData.getIntAge() + "");
+        startActivity(intent);
+        finish(); // close this activity and return to preview activity (if there is any)
+        super.onBackPressed();
     }
 
     /**
