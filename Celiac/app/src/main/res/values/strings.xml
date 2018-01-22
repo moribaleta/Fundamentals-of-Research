@@ -94,4 +94,6 @@
     <string name="action_settings">Settings</string>
     <string name="add_item_message">There are currently no Test Results\n press + button\n  to conduct Test</string>
     <string name="add_item_message_user">There are currently no User saved\n press + button\n  to add User</string>
+    <string name="title_activity_history">HistoryActivity</string>
+    <string name="scroll_down">scroll down to see previous results</string>
 </resources>

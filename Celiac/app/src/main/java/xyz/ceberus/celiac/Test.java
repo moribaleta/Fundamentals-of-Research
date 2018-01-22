@@ -27,6 +27,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 
 public class Test extends AppCompatActivity {
+    private static final String TAG = "TEST";
     LinearLayout linearLayoutQuestion;
     TextView txtName, txtAge;
     Button btnSubmit;
@@ -189,17 +190,17 @@ public class Test extends AppCompatActivity {
             }
             strAnswer = strAnswer.substring(0, strAnswer.length() - 1);
             Log.e("Test", "userdata: " + strAnswer + " , " + strName + " , " + intAge);
+            startTest(fileStorage, strAnswer);
             //final UserData userData = new UserData(strAnswer, strName, intAge, -1);
 
-            final ProgressDialog dialog = ProgressDialog.show(this, "",
+            /*final ProgressDialog dialog = ProgressDialog.show(this, "",
                     "Loading. Please wait...", true);
             final String finalStrAnswer = strAnswer;
             Thread thread = new Thread() {
                 @Override
                 public void run() {
                     userData.setStrDataset(finalStrAnswer);
-
-                    UserData userDataResult = generateResult(userData);
+                    UserData userDataResult = FileStorage.generateResult(userData);
                     userDataResult.setDate();
                     fileStorage.insertUserHistory(userDataResult);
                     dialog.dismiss();
@@ -225,7 +226,7 @@ public class Test extends AppCompatActivity {
                 }
             };
 
-            thread.start();
+            thread.start();*/
 
 
         } catch (Exception e) {
@@ -233,7 +234,54 @@ public class Test extends AppCompatActivity {
         }
     }
 
-    private UserData generateResult(UserData userData) {
+    private void startTest(final FileStorage fileStorage, String strAnswer) {
+        final ProgressDialog dialog = ProgressDialog.show(this, "",
+                "Loading. Please wait...", true);
+        final String finalStrAnswer = strAnswer;
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+
+                while (FileStorage.threadAdaboost.isAlive()) {
+                    Log.e(TAG, "adaboost training is still running: " + FileStorage.threadAdaboost.isAlive());
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                userData.setStrDataset(finalStrAnswer);
+                UserData userDataResult = FileStorage.generateResult(userData);
+                userDataResult.setDate();
+                fileStorage.insertUserHistory(userDataResult);
+                dialog.dismiss();
+                Snackbar snackbar = Snackbar
+                        .make(linearLayoutQuestion, "Process complete", Snackbar.LENGTH_LONG);
+                snackbar.show();
+                snackbar.addCallback(new Snackbar.Callback() {
+
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        Intent intent = new Intent(Test.this, DataView.class);
+                        intent.putExtra("ID", userData.getStrUserId());
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onShown(Snackbar snackbar) {
+
+                    }
+                });
+
+            }
+        };
+        thread.start();
+    }
+
+
+   /* private UserData generateResult(UserData userData) {
         userData.showDataFull();
         FileStorage fileStorage;
         try {
@@ -256,34 +304,31 @@ public class Test extends AppCompatActivity {
             e.printStackTrace();
         }
         return userData;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            Intent intent = new Intent(Test.this, History.class);
-            userData.showData();
-            intent.putExtra("ID", userData.getStrUserId());
-            intent.putExtra("NAME", userData.getStrName());
-            intent.putExtra("AGE", userData.getIntAge() + "");
-            startActivity(intent);
-            finish(); // close this activity and return to preview activity (if there is any)
+            goBack();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-
-        Intent intent = new Intent(Test.this, History.class);
+    void goBack() {
+        Intent intent = new Intent(Test.this, HistoryActivity.class);
         userData.showData();
         intent.putExtra("ID", userData.getStrUserId());
         intent.putExtra("NAME", userData.getStrName());
         intent.putExtra("AGE", userData.getIntAge() + "");
         startActivity(intent);
         finish(); // close this activity and return to preview activity (if there is any)
+    }
+
+    @Override
+    public void onBackPressed() {
+        goBack();
         super.onBackPressed();
     }
 

@@ -1,13 +1,74 @@
 package xyz.ceberus.celiac;
 
+import android.util.Log;
+
 /**
  * Created by Eli on 12/9/2017.
  */
 
 public class CeliacType {
-
+    String strContribution;
+    String strResult;
+    UserData userData;
     CeliacType(){
 
+    }
+    CeliacType(UserData userData){
+        this.userData = userData;
+        getResultMessage();
+    }
+
+
+    String getStrContribution(){
+        return strContribution;
+    }
+    String getStrResult(){
+        return strResult;
+    }
+
+    void getResultMessage(){
+        strResult = "The result is Negative based from the test conducted";
+        Log.e("DATAVIEW","user result: "+userData.getIntResult());
+        if (userData.getIntResult() != -1)
+            strResult ="The result is Positive, we advice you to go to the Doctor " +
+                    "(Gastroenterologist) and show this result to confirm if you have Celiac Disease";
+
+        if (userData.getIntResult() == 1) {
+
+            String strType = TestResult(userData.getDataSet()) + "";
+            if (strType == "1") {
+                strType += " silent";
+            } else if (strType == "2") {
+                strType += " typical";
+            } else {
+                strType += " atypical";
+            }
+            strResult += "\nCeliac Type: " + strType;
+        }
+        try {
+            getContributionMessage();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void getContributionMessage() {
+        String arrStrData[] = userData.getDataSet().split("\\|");
+        int i = 0;
+        String strMessage="The following symptoms have contributed to the result";
+        for(String strData: arrStrData){
+            if(i == 0||i==1||i==3||i==4||i==8||i==11||i==15){
+                if(strData.equals("1")){
+                    strMessage += "\n"+"\u2022 "+(i+1);
+                }
+            }else{
+                if(Integer.parseInt(strData)>2){
+                    strMessage += "\n"+"\u2022 "+(i+1);
+                }
+            }
+            i++;
+        }
+        this.strContribution = strMessage;
     }
 
     int TestResult(String strResults){

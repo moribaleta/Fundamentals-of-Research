@@ -1,37 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_history"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.ceberus.celiac.History">
+    android:fitsSystemWindows="true"
+    tools:context="xyz.ceberus.celiac.HistoryActivity"
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewItemNone"
-        android:layout_gravity="center"
-        android:textSize="24sp"
-        android:text="@string/add_item_message"
-        android:textAlignment="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+    android:id="@+id/coordinator">
 
-    <ListView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/listView" />
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:padding="16dp"
+                android:layout_marginTop="72dp"
+                android:id="@+id/linearLayout_Result">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/box"
+                    android:paddingBottom="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingStart="16dp">
+
+                    <TextView
+                        android:text="User"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textViewUserData"
+                        android:textSize="24sp"
+                        android:layout_margin="10dp"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:text="Current Test Result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textViewCurrent"
+                        android:textSize="14sp"
+
+                        android:layout_marginBottom="6dp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginStart="10dp" />
+
+                    <TextView
+                        android:text="Result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textViewResult"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginStart="10dp" />
+
+                    <TextView
+                        android:text="Date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textViewDate"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginStart="10dp" />
+
+                    <Button
+                        android:text="View Test"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnCurrent"
+                        android:background="@drawable/box_button" />
+                </LinearLayout>
+
+                <TextView
+                    android:text="@string/scroll_down"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:layout_margin="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp" />
+            </LinearLayout>
+
+            <TextView
+                android:text="@string/add_item_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewItemNone"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textAlignment="center" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_history" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
         app:srcCompat="@android:drawable/ic_input_add"
-        android:tint="@android:color/background_light" />
+        android:foregroundTint="@android:color/white"
+        android:tint="@android:color/white" />
 
 </android.support.design.widget.CoordinatorLayout>

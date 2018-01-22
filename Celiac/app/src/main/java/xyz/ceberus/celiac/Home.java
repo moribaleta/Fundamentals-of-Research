@@ -41,16 +41,31 @@ public class Home extends AppCompatActivity {
             }
         });
         getTraining();
-
+        final Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.clockwise);
         btnTest.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
-                        R.anim.clockwise);
+
                 btnTest.startAnimation(animation);
                 return true;
             }
         });
+
+        btnAbouts.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                btnAbouts.startAnimation(animation);
+                return true;
+            }
+        });
+
+        final Animation entrance = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.slidein);
+
+        btnTest.startAnimation(entrance);
+        btnAbouts.startAnimation(entrance);
+
 
        /* btnHistory.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

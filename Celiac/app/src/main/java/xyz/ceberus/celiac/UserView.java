@@ -1,6 +1,8 @@
 package xyz.ceberus.celiac;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +28,7 @@ public class UserView extends AppCompatActivity {
     ArrayList<UserData>arrUserData = new ArrayList<>();
     Boolean blTest =false;
     TextView textViewNoUser;
+    private ProgressDialog dialogLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,31 @@ public class UserView extends AppCompatActivity {
         });
         textViewNoUser = (TextView)findViewById(R.id.textViewItemNoneUser);
         listViewUser = (ListView)findViewById(R.id.listUser);
-        init();
+
+        dialogLoad = ProgressDialog.show(this, "",
+                "Loading. Please wait...", true);
+        final Thread thread = new Thread() {
+            @Override
+            public void run() {
+                listViewUser.setVisibility(View.INVISIBLE);
+                init();
+                try {
+                    if(FileStorage.threadAdaboost.isAlive())
+                        sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                dialogLoad.dismiss();
+            }
+        };
+        thread.start();
+        dialogLoad.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                listViewUser.setVisibility(View.VISIBLE);
+            }
+        });
     }
     EditText inputName;
     EditText inputAge;
@@ -171,13 +198,15 @@ public class UserView extends AppCompatActivity {
                             intent.putExtra("AGE", userData.getIntAge() + "");
                             startActivity(intent);
                         }else {//history*/
-                            Intent intent = new Intent(UserView.this, History.class);
+                            Intent intent = new Intent(UserView.this, HistoryActivity.class);
                             UserData userData = arrUserData.get(i);
                             userData.showData();
                             intent.putExtra("ID", userData.getStrUserId());
                             intent.putExtra("NAME", userData.getStrName());
                             intent.putExtra("AGE", userData.getIntAge() + "");
                             startActivity(intent);
+                        /*Intent intent = new Intent(UserView.this,HistoryActivity.class);
+                        startActivity(intent);*/
                         //}
                     }
                 });

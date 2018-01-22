@@ -1,6 +1,7 @@
 package xyz.ceberus.celiac;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.concurrent.BrokenBarrierException;
@@ -10,6 +11,53 @@ import java.util.concurrent.BrokenBarrierException;
  */
 
 public class FileStorage {
+
+    private static Adaboost adaboost;
+    public static Thread threadAdaboost;
+
+    public static void runAdaboostGeneratorThread(final Context context){
+        threadAdaboost = new Thread() {
+            @Override
+            public void run() {
+                generateAdaboost(context);
+            }
+        };
+        threadAdaboost.start();
+    }
+
+
+
+    public static void generateAdaboost(Context context) {
+        FileStorage fileStorage;
+        try {
+            fileStorage = new FileStorage(context);
+            ArrayList<TrainingData> arrTrainingData = fileStorage.GetTraining();
+            String strBuilder = "";
+            for (TrainingData trainingDataRow : arrTrainingData) {
+                strBuilder += trainingDataRow.getStrDataSet() + "|" + trainingDataRow.getIntResult() + "\n";
+            }
+            strBuilder = strBuilder.substring(0, strBuilder.length() - 1);
+            Log.e("Test", "Traindata: " + strBuilder);
+            adaboost = Adaboost.train(strBuilder, 10, 20, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static UserData generateResult(UserData userData) {
+        userData.showDataFull();
+        try {
+            int output = adaboost.classify(userData.getDataSet().split("\\|"));
+            Log.e("Test", "Result Data Label: " + userData.getDataSet() + " res: " + output);
+            userData.setIntResult(output);
+            return userData;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userData;
+    }
+
+
     DictionaryHelper dictionary;
     Context context;
 
