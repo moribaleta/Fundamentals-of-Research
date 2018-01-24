@@ -152,7 +152,7 @@ public class HistoryActivity extends AppCompatActivity {
             });*/
             if (arrUserData.size() > 0) {
                 textViewNoItem.setVisibility(View.GONE);
-                UserData currUserData = arrUserData.get(arrUserData.size() - 1);
+                UserData currUserData = arrUserData.get(arrUserData.size()-1);
                 TextView textViewName = (TextView) findViewById(R.id.textViewUserData);
                 TextView textViewResult = (TextView) findViewById(R.id.textViewResult);
                 TextView textViewDate = (TextView) findViewById(R.id.textViewDate);
@@ -175,7 +175,7 @@ public class HistoryActivity extends AppCompatActivity {
                 }
                 textViewDate.setText(strBuilder);
 
-                CeliacType celiacType = new CeliacType(userData);
+                CeliacType celiacType = new CeliacType(currUserData);
                 textViewResult.setText(celiacType.getStrResult());
 
                 Button btnViewCurrent = (Button) findViewById(R.id.btnCurrent);

@@ -16,8 +16,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class DataView extends AppCompatActivity {
+    private static final String TAG = "DataView";
     UserData userData;
-    TextView txtName, txtAge, txtResult, txtDate, txtContribution;
+    TextView txtName, txtAge, txtResult, txtDate;
     //ListView listViewData;
     LinearLayout linearData, linearTest;
     ArrayList<Question> arrQuestion = new ArrayList<>();
@@ -49,7 +50,7 @@ public class DataView extends AppCompatActivity {
         txtAge = (TextView) findViewById(R.id.textAge);
         txtResult = (TextView) findViewById(R.id.txtResult);
         txtDate = (TextView) findViewById(R.id.txtDate);
-        txtContribution = (TextView) findViewById(R.id.txtContribution);
+        /*txtContribution = (TextView) findViewById(R.id.txtContribution);*/
         //listViewData = (ListView) findViewById(R.id.listViewData);
         linearData = (LinearLayout) findViewById(R.id.linearData);
         linearTest = (LinearLayout) findViewById(R.id.linearTest);
@@ -144,7 +145,8 @@ public class DataView extends AppCompatActivity {
 
         CeliacType celiacType = new CeliacType(userData);
         txtResult.setText(celiacType.getStrResult());
-        txtContribution.setText(celiacType.getStrContribution());
+        //txtContribution.setText(celiacType.getStrContribution());
+        int arrIntContribution[] = celiacType.getStrContribution();
 
         String strData = userData.getDataSet();
 
@@ -178,8 +180,19 @@ public class DataView extends AppCompatActivity {
                 TextView txtCount = (TextView) viewToLoad.findViewById(R.id.txtCount);
                 TextView txtQuestion = (TextView) viewToLoad.findViewById(R.id.txtQuestion);
                 TextView txtAnswer = (TextView) viewToLoad.findViewById(R.id.txtAnswer);
+                TextView txtContribution = (TextView) viewToLoad.findViewById(R.id.txtContribution);
                 txtCount.setText((intCount + 1) + ".  ");
                 txtQuestion.setText(question.getStrQuestion());
+                try {
+                    Log.e(TAG,"data contribution: "+arrIntContribution[intCount]);
+                    if (userData.getIntResult()!=-1 && arrIntContribution[intCount]==1)
+                        txtContribution.setText("(this symptom have contributed to the result)");
+                }catch (IndexOutOfBoundsException e){
+
+                }
+                /*if(arrIntContribution.get(intCount)!=null)
+                    txtAnswer.setText(arrAnswer[intIndex - 1]+"\n(this symptom have contributed to the result)");
+                else*/
                 txtAnswer.setText(arrAnswer[intIndex - 1]);
                 intCount++;
                 linearTest.addView(viewToLoad);

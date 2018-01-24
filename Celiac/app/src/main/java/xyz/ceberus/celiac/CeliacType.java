@@ -7,7 +7,7 @@ import android.util.Log;
  */
 
 public class CeliacType {
-    String strContribution;
+    int arrIntContribution[];
     String strResult;
     UserData userData;
     CeliacType(){
@@ -19,8 +19,8 @@ public class CeliacType {
     }
 
 
-    String getStrContribution(){
-        return strContribution;
+    int[] getStrContribution(){
+        return arrIntContribution;
     }
     String getStrResult(){
         return strResult;
@@ -55,20 +55,35 @@ public class CeliacType {
     public void getContributionMessage() {
         String arrStrData[] = userData.getDataSet().split("\\|");
         int i = 0;
-        String strMessage="The following symptoms have contributed to the result";
+        int arrInt[] = new int[16];
+        //String strMessage="The following symptoms have contributed to the result";
+
         for(String strData: arrStrData){
-            if(i == 0||i==1||i==3||i==4||i==8||i==11||i==15){
+            if(i == 0||i==1||i==3||i==4||i==8||i==11){
                 if(strData.equals("1")){
-                    strMessage += "\n"+"\u2022 "+(i+1);
+                    //strMessage += "\n"+"\u2022 "+(i+1);
+                    //arrayList.add(i);
+                    arrInt[i] = 1;
+                }else{
+                    arrInt[i] = 0;
                 }
             }else{
                 if(Integer.parseInt(strData)>2){
-                    strMessage += "\n"+"\u2022 "+(i+1);
+                    //strMessage += "\n"+"\u2022 "+(i+1);
+                    //arrayList.add(i);
+                    arrInt[i] = 1;
+                }else{
+                    arrInt[i] = 0;
                 }
             }
             i++;
         }
-        this.strContribution = strMessage;
+        /*for(int j: arrayList){
+            Log.e(TAG,"symptom number: "+j);
+        }*/
+
+        this.arrIntContribution = arrInt;
+        //this.strContribution = strMessage;
     }
 
     int TestResult(String strResults){
