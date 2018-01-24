@@ -34,6 +34,8 @@ public class Home extends AppCompatActivity {
                 openHistory(view);
             }
         });*/
+
+        getWindow().getAttributes().windowAnimations = R.style.Fade;
         btnAbouts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

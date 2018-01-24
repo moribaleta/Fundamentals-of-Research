@@ -95,22 +95,28 @@ public class UserView extends AppCompatActivity {
         inputAge = (EditText)dialog.findViewById(R.id.editAge);
         btnCancel = (Button)dialog.findViewById(R.id.btnCancel);
         btnProceed = (Button)dialog.findViewById(R.id.btnProceed);
+
         btnProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userData.setStrName(inputName.getText().toString());
-                userData.setIntAge(Integer.parseInt(inputAge.getText().toString()));
-                if(userData.getIntAge()>=16) {
-                    saveUser(userData);
-                    Log.e("USERDATA", "name: " + userData.getStrName() + " age: " + userData.getIntAge());
-                    Intent intent = getIntent();
-                    intent.putExtra("Test", strIntentSend);
-                    finish();
-                    startActivity(intent);
-                }else{
-                    Snackbar snackbar = Snackbar
-                            .make(listViewUser, "User must be 14 or above", Snackbar.LENGTH_LONG);
-                    snackbar.show();
+
+                try {
+                    userData.setStrName(inputName.getText().toString());
+                    userData.setIntAge(Integer.parseInt(inputAge.getText().toString()));
+                    if (userData.getIntAge() >= 16) {
+                        saveUser(userData);
+                        Log.e("USERDATA", "name: " + userData.getStrName() + " age: " + userData.getIntAge());
+                        Intent intent = getIntent();
+                        intent.putExtra("Test", strIntentSend);
+                        finish();
+                        startActivity(intent);
+                    } else {
+                        Snackbar snackbar = Snackbar
+                                .make(listViewUser, "User must be 14 or above", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
