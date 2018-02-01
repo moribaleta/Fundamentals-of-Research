@@ -16,6 +16,7 @@ public class UserData {
     public String strDate;
     public int intAge;
     public int intResult;
+    public AdaboostData adaboostData;
 
 
     public UserData(){
@@ -91,5 +92,13 @@ public class UserData {
 
     public void setDate(String strDate) {
         this.strDate = strDate;
+    }
+
+    public void setAdaboostData(AdaboostData adaboostData) {
+        this.adaboostData = adaboostData;
+    }
+
+    public AdaboostData getAdaboostData(){
+        return this.adaboostData;
     }
 }

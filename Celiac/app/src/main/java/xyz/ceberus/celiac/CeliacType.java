@@ -2,6 +2,8 @@ package xyz.ceberus.celiac;
 
 import android.util.Log;
 
+import java.util.HashMap;
+
 /**
  * Created by Eli on 12/9/2017.
  */
@@ -9,13 +11,32 @@ import android.util.Log;
 public class CeliacType {
     int arrIntContribution[];
     String strResult;
+    int intType;
     UserData userData;
+    HashMap<Integer,String[]>arrHashMapInfo = new HashMap<>();
     CeliacType(){
-
+        initInfo();
     }
     CeliacType(UserData userData){
         this.userData = userData;
+        initInfo();
+
         getResultMessage();
+    }
+
+    private void initInfo() {
+        String strInput[] = new String[2];
+        strInput[0] = "Silent Celiac Disease";
+        strInput[1] ="Silent celiac disease or the Type 1 Celiac Disease exists if you don’t experience any known symptoms of celiac disease but test positive for it. This is usually discovered by a doctor who is examining you for another condition and discovers that you’re at risk for celiac disease (family history, perhaps).";
+        arrHashMapInfo.put(1,strInput);
+        String strInput2[] = new String[2];
+        strInput2[0]="Typical Celiac Disease";
+        strInput2[1]="“Typical” celiac disease or the Type 2 Celiac Disease produces all of the symptoms most stereotypically associated with gluten intolerance and celiac disease: gas, bloating, diarrhea, andconstipation. Basically, it is where celiac disease clearly manifests itself along your intestinal tract with its most well-known symptoms.";
+        arrHashMapInfo.put(2,strInput2);
+        String strInput3[] = new String[2];
+        strInput3[0]="Atypical Celiac Disease";
+        strInput3[1]="Atypical celiac disease or the Type 3 Celiac Disease occurs when patients test positive for celiac disease but they don’t have the obvious gastrointestinal symptoms. Instead, when someone has atypical celiac disease they tend to develop symptoms extra-intestinally, which means they develop symptoms beyond their gut. This includes migraines, ataxia, neuropathy, joint pain and more. Some researchers even believe celiac disease may manifest neurological symptoms more often than gastrointestinal symptoms";
+        arrHashMapInfo.put(3,strInput3);
     }
 
 
@@ -35,15 +56,17 @@ public class CeliacType {
 
         if (userData.getIntResult() == 1) {
 
-            String strType = TestResult(userData.getDataSet()) + "";
-            if (strType == "1") {
-                strType += " silent";
-            } else if (strType == "2") {
-                strType += " typical";
-            } else {
-                strType += " atypical";
+            intType = TestResult(userData.getDataSet());
+
+            String strType = "";
+            if (intType == 1) {
+                strType = " silent";
+            } else if (intType == 2) {
+                strType = " typical";
+            } else if(intType == 3){
+                strType = " atypical";
             }
-            strResult += "\nCeliac Type: " + strType;
+            strResult += "\nCeliac Type: "+intType+" "+strType;
         }
         try {
             getContributionMessage();
@@ -97,19 +120,23 @@ public class CeliacType {
                 arrStrResults[15]);
         if(intType1==0&&intType2==0&&intType3==0){
             return 0;
-        }
+        }/*
         int arrIntTypes[] = {intType1,intType2,intType3};
         int winnerScore = -1, winner = 0;
+
         for (int i = 0; i < arrIntTypes.length; i++) {
             if (arrIntTypes[i] > winnerScore) {
                 winner = i;
                 winnerScore = arrIntTypes[i];
             }
         }
-        winner++;
+        winner++;*/
         if(intType1>0)
             return 1;
-        return winner;
+        else if(intType2>0)
+            return 2;
+        else
+            return 3;
     }
 
     private int testType1(String strSymptoms1, String strSymptoms2) {

@@ -10,7 +10,7 @@ public class generateDataset {
 		FileReader fileReader;
 		BufferedReader buffReader;
 		try {
-			fileReader = new FileReader("resources/dataset.csv");
+			fileReader = new FileReader("resources/dataset1.csv");
 			buffReader = new BufferedReader(fileReader);
 			String strline;
 			int intLoop = 1;
@@ -42,8 +42,8 @@ public class generateDataset {
 					}
 				}
 				strBuilder = strBuilder.substring(0,strBuilder.length()-1);
-				//String strSQL = intLoop+" INSERT INTO TRAINING_TBL ('DATASET','RESULT') values ('"+strBuilder+"','"+strResult+"');";
-				String strSQL = strBuilder+"|"+strResult;
+				String strSQL = "INSERT INTO TRAINING_TBL ('DATASET','RESULT') values ('"+strBuilder+"','"+strResult+"');";
+				
 				System.out.println(strSQL);
 				intLoop++;
 			}

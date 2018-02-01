@@ -1,5 +1,6 @@
 package xyz.ceberus.celiac;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class DataView extends AppCompatActivity {
     private static final String TAG = "DataView";
     UserData userData;
-    TextView txtName, txtAge, txtResult, txtDate;
+    TextView txtName, txtAge, txtResult, txtDate, txtMoreInfo;
     //ListView listViewData;
     LinearLayout linearData, linearTest;
     ArrayList<Question> arrQuestion = new ArrayList<>();
@@ -50,6 +51,7 @@ public class DataView extends AppCompatActivity {
         txtAge = (TextView) findViewById(R.id.textAge);
         txtResult = (TextView) findViewById(R.id.txtResult);
         txtDate = (TextView) findViewById(R.id.txtDate);
+        txtMoreInfo = (TextView) findViewById(R.id.txtMoreInfo);
         /*txtContribution = (TextView) findViewById(R.id.txtContribution);*/
         //listViewData = (ListView) findViewById(R.id.listViewData);
         linearData = (LinearLayout) findViewById(R.id.linearData);
@@ -90,7 +92,11 @@ public class DataView extends AppCompatActivity {
                 new TestPrint(DataView.this).execute(userData);
             }
         });
-        processData();
+        try {
+            processData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void getUserDataByPosition(String strId, int intPosition) {
@@ -143,8 +149,43 @@ public class DataView extends AppCompatActivity {
             txtResult.append("\nCeliac Type: " + strType);
         }*/
 
-        CeliacType celiacType = new CeliacType(userData);
+
+        final CeliacType celiacType = new CeliacType(userData);
         txtResult.setText(celiacType.getStrResult());
+
+        if (userData.getIntResult() > -1) {
+            try {
+                txtMoreInfo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            String arrStr[] = celiacType.arrHashMapInfo.get(celiacType.intType);
+                            Log.e("TAG", "type: " + arrStr[0]);
+                            final android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(DataView.this);
+                            dialogBuilder.setCancelable(true);
+                            dialogBuilder.setTitle(arrStr[0]);
+                            dialogBuilder.setMessage(arrStr[1]);
+                            dialogBuilder.setNegativeButton("close", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    }
+                            );
+
+                            android.support.v7.app.AlertDialog alertDialog = dialogBuilder.create();
+                            alertDialog.show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            txtMoreInfo.setVisibility(View.GONE);
+        }
+
         //txtContribution.setText(celiacType.getStrContribution());
         int arrIntContribution[] = celiacType.getStrContribution();
 
@@ -184,10 +225,10 @@ public class DataView extends AppCompatActivity {
                 txtCount.setText((intCount + 1) + ".  ");
                 txtQuestion.setText(question.getStrQuestion());
                 try {
-                    Log.e(TAG,"data contribution: "+arrIntContribution[intCount]);
-                    if (userData.getIntResult()!=-1 && arrIntContribution[intCount]==1)
+                    Log.e(TAG, "data contribution: " + arrIntContribution[intCount]);
+                    if (userData.getIntResult() != -1 && arrIntContribution[intCount] == 1)
                         txtContribution.setText("(this symptom have contributed to the result)");
-                }catch (IndexOutOfBoundsException e){
+                } catch (IndexOutOfBoundsException e) {
 
                 }
                 /*if(arrIntContribution.get(intCount)!=null)

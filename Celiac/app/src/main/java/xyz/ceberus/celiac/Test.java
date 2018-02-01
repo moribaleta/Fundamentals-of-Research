@@ -26,6 +26,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 public class Test extends AppCompatActivity {
     private static final String TAG = "TEST";
     LinearLayout linearLayoutQuestion;
@@ -145,25 +147,6 @@ public class Test extends AppCompatActivity {
                         alertDialog.setTitle("More Information");
                         alertDialog.show();
                         Log.e("ALERT", "alert " + question.getStrInfo() + " - " + question.getStrLink());
-                       /* AlertDialog.Builder builder1 = new AlertDialog.Builder(Test.this);
-
-                        builder1.setMessage(question.getStrInfo()+"\n");
-                        builder1.setCancelable(true);
-                        builder1.setNegativeButton(
-                                "Close",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog alert11 = builder1.create();
-                        alert11.show();*/
-
-
-                        /*TextView textInfo = (TextView) dialog.findViewById(R.id.textInfo);
-                        TextView textLink = (TextView) dialog.findViewById(R.id.textLink);
-                        textInfo.setText(question.getStrInfo());
-                        textLink.setText(question.getStrLink());*/
                     }
                 });
             } else {
@@ -235,10 +218,9 @@ public class Test extends AppCompatActivity {
     }
 
     private void startTest(final FileStorage fileStorage, String strAnswer) {
-        final ProgressDialog dialog = ProgressDialog.show(this, "",
-                "Loading. Please wait...", true);
+
         final String finalStrAnswer = strAnswer;
-        Thread thread = new Thread() {
+        /*Thread thread = new Thread() {
             @Override
             public void run() {
 
@@ -252,21 +234,105 @@ public class Test extends AppCompatActivity {
                 }
 
                 userData.setStrDataset(finalStrAnswer);
-                UserData userDataResult = FileStorage.generateResult(userData);
+                final UserData userDataResult = FileStorage.generateResult(userData);
+                userDataResult.setDate();
+                fileStorage.insertUserHistory(userDataResult);
+                dialog.dismiss();
+
+                    Snackbar snackbar = Snackbar
+                            .make(linearLayoutQuestion, "Process complete", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                    snackbar.addCallback(new Snackbar.Callback() {
+
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            showResult(userDataResult);
+                        }
+
+                        @Override
+                        public void onShown(Snackbar snackbar) {
+
+                        }
+                    });
+                }
+
+            //}
+        };*/
+        final ProgressDialog dialog = ProgressDialog.show(this, "",
+                "Generating result. Please wait...", true);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (FileStorage.threadAdaboost.isAlive()) {
+                    Log.e(TAG, "adaboost training is still running: " + FileStorage.threadAdaboost.isAlive());
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                dialog.dismiss();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        userData.setStrDataset(finalStrAnswer);
+                        final UserData userDataResult = FileStorage.generateResult(userData);
+                        userDataResult.setDate();
+                        fileStorage.insertUserHistory(userDataResult);
+                        dialog.dismiss();
+                        Snackbar snackbar = Snackbar
+                                .make(linearLayoutQuestion, "Process complete", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                        snackbar.addCallback(new Snackbar.Callback() {
+
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                //
+                                showResult(userDataResult);
+                            }
+
+                            @Override
+                            public void onShown(Snackbar snackbar) {
+
+                            }
+                        });
+                    }
+                });
+            }
+
+        }).start();
+
+
+
+        /*runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (FileStorage.threadAdaboost.isAlive()) {
+                    Log.e(TAG, "adaboost training is still running: " + FileStorage.threadAdaboost.isAlive());
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                userData.setStrDataset(finalStrAnswer);
+                final UserData userDataResult = FileStorage.generateResult(userData);
                 userDataResult.setDate();
                 fileStorage.insertUserHistory(userDataResult);
                 dialog.dismiss();
                 Snackbar snackbar = Snackbar
-                        .make(linearLayoutQuestion, "Process complete", Snackbar.LENGTH_LONG);
+                        .make(linearLayoutQuestion, "Process complete", Snackbar.LENGTH_SHORT);
                 snackbar.show();
                 snackbar.addCallback(new Snackbar.Callback() {
 
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
-                        Intent intent = new Intent(Test.this, DataView.class);
-                        intent.putExtra("ID", userData.getStrUserId());
-                        startActivity(intent);
-                        finish();
+                        //
+                        showResult(userDataResult);
                     }
 
                     @Override
@@ -276,8 +342,37 @@ public class Test extends AppCompatActivity {
                 });
 
             }
-        };
-        thread.start();
+
+        });*/
+
+            //thread.start();
+
+
+        }
+
+
+
+    void showResult(UserData userDataResult) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Test.this);
+
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setPositiveButton("proceed", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(Test.this, DataView.class);
+                intent.putExtra("ID", userData.getStrUserId());
+                startActivity(intent);
+                dialog.cancel();
+                finish();
+            }
+        });
+        dialogBuilder.setTitle("Adaboost Log");
+        String strBuilder = "";
+        for (String strOut : userDataResult.getAdaboostData().getArrayListLog()) {
+            strBuilder += "\u2022 " + strOut + "\n";
+        }
+        dialogBuilder.setMessage(strBuilder);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
 

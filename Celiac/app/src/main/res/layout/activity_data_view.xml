@@ -82,12 +82,14 @@
                     android:paddingTop="32dp"
                     android:paddingBottom="32dp" />
 
-               <!-- <TextView
-                    android:text="TextView"
+                <TextView
+                    android:text="more information"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtContribution"
-                    android:layout_margin="16dp" />-->
+                    android:id="@+id/txtMoreInfo"
+                    android:background="#EFF0F1"
+                    android:padding="10dp"
+                    android:textColor="@color/colorPrimaryDark" />
 
             </LinearLayout>
 

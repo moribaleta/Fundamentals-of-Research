@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,19 +54,24 @@ public class UserView extends AppCompatActivity {
                 createUser();
             }
         });
+        fab.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.clockwise));
         textViewNoUser = (TextView)findViewById(R.id.textViewItemNoneUser);
         listViewUser = (ListView)findViewById(R.id.listUser);
 
         dialogLoad = ProgressDialog.show(this, "",
                 "Loading. Please wait...", true);
+        listViewUser.setVisibility(View.INVISIBLE);
+        //textViewNoUser.setVisibility(View.INVISIBLE);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 listViewUser.setVisibility(View.INVISIBLE);
                 init();
                 try {
-                    if(FileStorage.threadAdaboost.isAlive())
+                    if(FileStorage.threadAdaboost.isAlive()) {
+
                         sleep(3000);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -74,6 +80,8 @@ public class UserView extends AppCompatActivity {
             }
         };
         thread.start();
+
+        listViewUser.setVisibility(View.VISIBLE);
         dialogLoad.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
@@ -100,23 +108,44 @@ public class UserView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                try {
-                    userData.setStrName(inputName.getText().toString());
-                    userData.setIntAge(Integer.parseInt(inputAge.getText().toString()));
-                    if (userData.getIntAge() >= 16) {
-                        saveUser(userData);
-                        Log.e("USERDATA", "name: " + userData.getStrName() + " age: " + userData.getIntAge());
-                        Intent intent = getIntent();
-                        intent.putExtra("Test", strIntentSend);
-                        finish();
-                        startActivity(intent);
-                    } else {
-                        Snackbar snackbar = Snackbar
-                                .make(listViewUser, "User must be 14 or above", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = null;
+                    if(inputName.getText().toString().equals("")&&inputAge.getText().toString().equals("")) {
+                        snackbar = Snackbar
+                                .make(listViewUser, "Please fill all required informations", Snackbar.LENGTH_SHORT);
                         snackbar.show();
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
+                    }else{
+                        if (inputName.getText().toString().equals("")) {
+                            snackbar = Snackbar
+                                    .make(listViewUser, "Please enter name", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        } else if (inputAge.getText().toString().equals("")) {
+                            snackbar = Snackbar
+                                    .make(listViewUser, "Please enter age", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        } else {
+                            if(!nameExist(inputName.getText().toString())) {
+                                userData.setStrName(inputName.getText().toString());
+                                userData.setIntAge(Integer.parseInt(inputAge.getText().toString()));
+                                if (userData.getIntAge() >= 16) {
+                                    saveUser(userData);
+                                    Log.e("USERDATA", "name: " + userData.getStrName() + " age: " + userData.getIntAge());
+                                    Intent intent = getIntent();
+                                    intent.putExtra("Test", strIntentSend);
+                                    finish();
+                                    startActivity(intent);
+                                } else {
+                                    snackbar = Snackbar
+                                            .make(listViewUser, "User must be 14 or above", Snackbar.LENGTH_LONG);
+                                    snackbar.show();
+                                }
+                            }else{
+                                snackbar = Snackbar
+                                        .make(listViewUser, "User already exist", Snackbar.LENGTH_LONG);
+                                snackbar.show();
+                            }
+                        }
+
+
                 }
             }
         });
@@ -170,6 +199,15 @@ public class UserView extends AppCompatActivity {
         builder.show();*/
     }
 
+    private boolean nameExist(String s) {
+        for(UserData userData: arrUserData){
+            if(userData.getStrName().equals(s)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void saveUser(UserData userData) {
         FileStorage fileStorage;
         try{
@@ -216,9 +254,10 @@ public class UserView extends AppCompatActivity {
                         //}
                     }
                 });
+                //listViewUser.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.slidein));
                 textViewNoUser.setVisibility(View.GONE);
             }else{
-
+                //textViewNoUser.setVisibility(View.VISIBLE);
             }
         }catch (Exception e){
             e.printStackTrace();

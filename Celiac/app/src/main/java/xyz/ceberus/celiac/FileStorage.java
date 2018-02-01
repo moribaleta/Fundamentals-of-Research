@@ -38,7 +38,7 @@ public class FileStorage {
             }
             strBuilder = strBuilder.substring(0, strBuilder.length() - 1);
             Log.e("Test", "Traindata: " + strBuilder);
-            adaboost = Adaboost.train(strBuilder, 10, 20, 0);
+            adaboost = Adaboost.train(strBuilder, 10, 25, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,9 +47,11 @@ public class FileStorage {
     public static UserData generateResult(UserData userData) {
         userData.showDataFull();
         try {
-            int output = adaboost.classify(userData.getDataSet().split("\\|"));
-            Log.e("Test", "Result Data Label: " + userData.getDataSet() + " res: " + output);
-            userData.setIntResult(output);
+            //int output = adaboost.classify(userData.getDataSet().split("\\|"));
+            AdaboostData adaboostData = adaboost.classifyData(userData.getDataSet().split("\\|"));
+            Log.e("Test", "Result Data Label: " + userData.getDataSet() + " res: " + adaboostData.getIntResult());
+            userData.setIntResult(adaboostData.getIntResult());
+            userData.setAdaboostData(adaboostData);
             return userData;
         } catch (Exception e) {
             e.printStackTrace();

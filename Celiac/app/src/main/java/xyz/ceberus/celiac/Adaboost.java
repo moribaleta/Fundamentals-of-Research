@@ -99,6 +99,33 @@ public class Adaboost {
 
 	}
 
+	public AdaboostData classifyData(String[] Observation) {
+        AdaboostData data = new AdaboostData();
+		BigDecimal sum = BigDecimal.ZERO;
+		/*for (DecisionStump classifier : model) {
+
+			sum = sum.add(BigDecimal.valueOf(classifier.classify(Observation))
+					.multiply(classifier.getAlpha()));
+		}*/
+		int intStumpIndex = 0;
+        ArrayList<String>arrayList = new ArrayList<>();
+		for (DecisionStump classifier : model) {
+			BigDecimal output = BigDecimal.valueOf(classifier.classify(Observation));
+			sum = sum.add(output.multiply(classifier.getAlpha())
+			);
+			Log.e("ADABOOST","index stump: "+intStumpIndex+" output: "+output+" sum: "+sum+" alpha: "+classifier.getAlpha());
+			arrayList.add("index stump: "+intStumpIndex+"\n output: "+output+"\n sum: "+sum+"\n alpha: "+classifier.getAlpha()+"\n");
+            intStumpIndex++;
+		}
+        data.setArrayListLog(arrayList);
+
+		if (sum.compareTo(BigDecimal.ZERO) == 1)
+			 data.setResult(1);
+        else
+            data.setResult(-1);
+		return data;
+	}
+
 	public int classify(double[] Observation) {
 
 		BigDecimal sum = BigDecimal.ZERO;

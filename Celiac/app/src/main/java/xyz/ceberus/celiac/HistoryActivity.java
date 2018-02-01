@@ -60,6 +60,41 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
         textViewNoItem = (TextView) findViewById(R.id.textViewItemNone);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+
+        fabAddItem.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.clockwise));
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean blClosed = true;
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
+                    // Collapsed
+                    if (arrUserData.size() > 0&&!blClosed) {
+                        /*linearLayoutResult.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.fadeout));
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                linearLayoutResult.setVisibility(View.INVISIBLE);
+                            }
+                        }, 500);*/
+                        linearLayoutResult.setVisibility(View.INVISIBLE);
+                        blClosed = true;
+                    }
+                } else if (verticalOffset == 0) {
+                    // Expanded
+                    if (arrUserData.size() > 0&&blClosed) {
+                        linearLayoutResult.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.fadein));
+                        linearLayoutResult.setVisibility(View.VISIBLE);
+                        blClosed = false;
+                    }
+
+                } else {
+
+                }
+            }
+        });
         init();
     }
 
@@ -73,11 +108,20 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    if(FileStorage.threadAdaboost.isAlive())
-                        sleep(3000);
-                } catch (InterruptedException e) {
+                    int count = 0;
+                    while (FileStorage.threadAdaboost.isAlive()&&count<5) {
+                        Log.e(TAG, "adaboost training is still running: " + FileStorage.threadAdaboost.isAlive());
+                        try {
+                            sleep(1000);
+                            count++;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+                dialogTraining.dismiss();
                 /*while (FileStorage.threadAdaboost.isAlive()){
                     Log.e(TAG, "adaboost training is still running: " + FileStorage.threadAdaboost.isAlive());
                     try {
@@ -86,7 +130,7 @@ public class HistoryActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                dialogTraining.dismiss();
+
                 Log.e(TAG, "adaboost training thread ended");*/
                 openTest();
             }
@@ -197,9 +241,9 @@ public class HistoryActivity extends AppCompatActivity {
         int i = 0;
         for (String strListItem : arrayList) {
             View viewToLoad = LayoutInflater.from(
-                    getApplicationContext()).inflate(android.R.layout.simple_list_item_1, null);
+                    getApplicationContext()).inflate(R.layout.history_item, null);
             linearLayoutHistory.addView(viewToLoad);
-            TextView textViewItem = (TextView) viewToLoad.findViewById(android.R.id.text1);
+            TextView textViewItem = (TextView) viewToLoad.findViewById(R.id.textView);
             textViewItem.setText(strListItem);
             final int finalI = i;
             textViewItem.setOnClickListener(new View.OnClickListener() {
