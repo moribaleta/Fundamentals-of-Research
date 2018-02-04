@@ -10,79 +10,61 @@ import java.util.List;
 
 public class Adaboost {
 
-	private List<DecisionStump> model;
+	private List<DecisionStump> listDecisionStumpModel;
 
 	private Adaboost() {
 
 	}
 
-	private Adaboost(List<DecisionStump> model) {
-		this.model = model;
+	private Adaboost(List<DecisionStump> listDecisionStumpModel) {
+		this.listDecisionStumpModel = listDecisionStumpModel;
 	}
 
-	/**
-	 * Train adaboost algorithm with trainFile in PSV format and return Adaboost Object 
-	 * @param trainFile
-	 * @param numberofSteps
-	 * @param maxIteration
-	 * @param targetError
-	 * @return
-	 * @throws IOException
-	 */
-	public static Adaboost train(String strTrainData, int numberofSteps,
-								 int maxIteration, double targetError) throws IOException {
+	public static Adaboost train(String strTrainData, int intNumberofSteps,
+								 int intMaxIteration, double dbTargetError) throws IOException {
 
-		int samplesCount = getTotalSamplesNumber(strTrainData);
+		int intSampleCount = getTotalSamplesNumber(strTrainData);
 		
-		double[] weights = new double[samplesCount];
-		double[] aggClassEst = new double[samplesCount];
+		double[] dbWeights = new double[intSampleCount];
+		double[] dbAggClassEst = new double[intSampleCount];
 		
-		for (int i = 0; i < weights.length; i++) {
-			weights[i] = ((double) 1 / samplesCount);
-			aggClassEst[i] = 0;
+		for (int i = 0; i < dbWeights.length; i++) {
+			dbWeights[i] = ((double) 1 / intSampleCount);
+			dbAggClassEst[i] = 0;
 		}
 
-		int[] labels = getlabels(strTrainData, samplesCount);
-		List<DecisionStump> model = new ArrayList<>();
+		int[] arrIntLabels = getlabels(strTrainData, intSampleCount);
+		List<DecisionStump> listDecisionStumpModels = new ArrayList<>();
 		
-		for (int i = 0; i < maxIteration; i++) {
-			DecisionStump stump = DecisionStump.bestStump(strTrainData, labels,
-					numberofSteps, weights);
-			BigDecimal log = BigDecimal.ONE
+		for (int i = 0; i < intMaxIteration; i++) {
+			DecisionStump stump = DecisionStump.bestStump(strTrainData, arrIntLabels,
+					intNumberofSteps, dbWeights);
+
+			BigDecimal bdLog = BigDecimal.ONE
 					.subtract((stump.getWeightedError())).divide(
 							stump.getWeightedError(), 6, RoundingMode.HALF_UP);
 
-			BigDecimal alpha = BigDecimal.valueOf(0.5)
-					.multiply(BigDecimal.valueOf(Math.log(log.doubleValue())))
+			BigDecimal bgDecimal = BigDecimal.valueOf(0.5)
+					.multiply(BigDecimal.valueOf(Math.log(bdLog.doubleValue())))
 					.setScale(12, BigDecimal.ROUND_HALF_UP);
 
-			stump.setAlpha(alpha);
-			model.add(stump);
+			stump.setAlpha(bgDecimal);
+			listDecisionStumpModels.add(stump);
 
-			weights = updateWeights(strTrainData, labels, stump, weights,
-					aggClassEst, alpha.doubleValue());
-			double error = calculateError(aggClassEst, labels);
+			dbWeights = updateWeights(arrIntLabels, stump, dbWeights,
+					dbAggClassEst, bgDecimal.doubleValue());
+			double dbError = calculateError(dbAggClassEst, arrIntLabels);
 
-			if (error <= targetError)
+			if (dbError <= dbTargetError)
 				break;
 		}
 
-		return new Adaboost(model);
+		return new Adaboost(listDecisionStumpModels);
 	}
 
-	/**
-	 * Used to predict new Enities
-	 * @param Observation
-	 * @return
-	 */
-	public int classify(String[] Observation) {
+	/*public int classify(String[] Observation) {
 
 		BigDecimal sum = BigDecimal.ZERO;
-		/*for (DecisionStump classifier : model) {
-
-			sum = sum.add(BigDecimal.valueOf(classifier.classify(Observation))
-					.multiply(classifier.getAlpha()));
-		}*/
 		int intStumpIndex = 0;
 		for (DecisionStump classifier : model) {
 			BigDecimal output = BigDecimal.valueOf(classifier.classify(Observation));
@@ -97,36 +79,31 @@ public class Adaboost {
 
 		return -1;
 
-	}
+	}*/
 
-	public AdaboostData classifyData(String[] Observation) {
-        AdaboostData data = new AdaboostData();
-		BigDecimal sum = BigDecimal.ZERO;
-		/*for (DecisionStump classifier : model) {
-
-			sum = sum.add(BigDecimal.valueOf(classifier.classify(Observation))
-					.multiply(classifier.getAlpha()));
-		}*/
+	public AdaboostData classifyData(String[] arrStrObservation) {
+        AdaboostData adbdataObject = new AdaboostData();
+		BigDecimal bgSum = BigDecimal.ZERO;
 		int intStumpIndex = 0;
         ArrayList<String>arrayList = new ArrayList<>();
-		for (DecisionStump classifier : model) {
-			BigDecimal output = BigDecimal.valueOf(classifier.classify(Observation));
-			sum = sum.add(output.multiply(classifier.getAlpha())
+		for (DecisionStump decisionStumpOut : listDecisionStumpModel) {
+			BigDecimal bgOutput = BigDecimal.valueOf(decisionStumpOut.classify(arrStrObservation));
+			bgSum = bgSum.add(bgOutput.multiply(decisionStumpOut.getAlpha())
 			);
-			Log.e("ADABOOST","index stump: "+intStumpIndex+" output: "+output+" sum: "+sum+" alpha: "+classifier.getAlpha());
-			arrayList.add("index stump: "+intStumpIndex+"\n output: "+output+"\n sum: "+sum+"\n alpha: "+classifier.getAlpha()+"\n");
+			Log.e("ADABOOST","index stump: "+intStumpIndex+" output: "+bgOutput+" sum: "+bgSum+" alpha: "+decisionStumpOut.getAlpha());
+			arrayList.add("index stump: "+intStumpIndex+"\n output: "+bgOutput+"\n sum: "+bgSum+"\n alpha: "+decisionStumpOut.getAlpha()+"\n");
             intStumpIndex++;
 		}
-        data.setArrayListLog(arrayList);
+        adbdataObject.setArrayListLog(arrayList);
 
-		if (sum.compareTo(BigDecimal.ZERO) == 1)
-			 data.setResult(1);
+		if (bgSum.compareTo(BigDecimal.ZERO) == 1)
+			 adbdataObject.setResult(1);
         else
-            data.setResult(-1);
-		return data;
+            adbdataObject.setResult(-1);
+		return adbdataObject;
 	}
 
-	public int classify(double[] Observation) {
+	/*public int classify(double[] Observation) {
 
 		BigDecimal sum = BigDecimal.ZERO;
 		for (DecisionStump classifier : model) {
@@ -140,37 +117,19 @@ public class Adaboost {
 
 		return -1;
 
-	}
+	}*/
 
-	/**
-	 * Calculate Error of current adaboost based on previous learning
-	 * @param aggClassEst
-	 * @param labels
-	 * @return
-	 */
-	private static double calculateError(double[] aggClassEst, int[] labels) {
 
-		int errorsCount = 0;
-		for (int i = 0; i < aggClassEst.length; i++) {
-			if ((aggClassEst[i] > 0 ? 1 : -1) != labels[i])
-				errorsCount++;
-
+	private static double calculateError(double[] arrDbAggClassEst, int[] arrIntLabels) {
+		int intErrorCount = 0;
+		for (int i = 0; i < arrDbAggClassEst.length; i++) {
+			if ((arrDbAggClassEst[i] > 0 ? 1 : -1) != arrIntLabels[i])
+				intErrorCount++;
 		}
-		return ((double) errorsCount / aggClassEst.length);
+		return ((double) intErrorCount / arrDbAggClassEst.length);
 	}
 
-	/**
-	 * Update Weights based on errors of previous learners
-	 * @param trainFile
-	 * @param labels
-	 * @param stump
-	 * @param weights
-	 * @param aggClassEst
-	 * @param alpha
-	 * @return
-	 * @throws IOException
-	 */
-	private static double[] updateWeights(String strTrainData, int[] labels,
+	private static double[] updateWeights(int[] labels,
 										  DecisionStump stump, double[] weights, double[] aggClassEst,
 										  double alpha) throws IOException {
 
@@ -195,20 +154,13 @@ public class Adaboost {
 
 			}
 		}
-
 		return normalizeWeights(weights);
-
 	}
 
 	public List<DecisionStump> getModel() {
-		return model;
+		return listDecisionStumpModel;
 	}
 
-	/**
-	 * Normalize Weights By divide everyone by total sum
-	 * @param inputWeights
-	 * @return
-	 */
 	private static double[] normalizeWeights(double[] inputWeights) {
 
 		double[] weights = new double[inputWeights.length];
@@ -224,49 +176,26 @@ public class Adaboost {
 
 	}
 
-	/**
-	 * Get Number of Lines in Training File
-	 * @param trainFile
-	 * @return
-	 * @throws IOException
-	 */
+
 	private static int getTotalSamplesNumber(String strTrainData) throws IOException {
-
-		/*LineNumberReader lineNumberReader = new LineNumberReader(
-				new FileReader(trainFile));
-		lineNumberReader.skip(Long.MAX_VALUE);
-		lineNumberReader.close();
-		return lineNumberReader.getLineNumber() + 1;*/
 		return strTrainData.split("\n").length+1;
-
 	}
 
 	
-	/**
-	 * Cache Label/Target Column of training File
-	 * @param trainFile
-	 * @param samplesCount
-	 * @return
-	 * @throws IOException
-	 */
-	public static int[] getlabels(String strTrainData, int samplesCount)
+
+	public static int[] getlabels(String strTrainData, int intSamplesCount)
 			throws IOException {
-		int[] labels = new int[samplesCount];
-		/*FileReader fileReader = new FileReader(trainFile);
-		BufferedReader breader = new BufferedReader(fileReader);
-		String line;*/
+		int[] arrIntLabels = new int[intSamplesCount];
 		String arrStrRow[] = strTrainData.split("\n");
 		int i = 0;
 		for(String strRow:arrStrRow) {
-			String[] cols = strRow.split("\\|");
-			Integer label = (int) Double.parseDouble(cols[cols.length - 1]
+			String[] arrStrCol = strRow.split("\\|");
+			Integer intLabel = (int) Double.parseDouble(arrStrCol[arrStrCol.length - 1]
 					.trim());
-			labels[i] = label;
+			arrIntLabels[i] = intLabel;
 			i++;
 		}
-
-		//breader.close();
-		return labels;
+		return arrIntLabels;
 	}
 
 

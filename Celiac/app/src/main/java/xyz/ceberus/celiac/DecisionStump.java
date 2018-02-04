@@ -5,18 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 
- * @author mostafa
- * 
- *         Decision Stump Classifier It is a decision tree with one internal
- *         node (the root) which is immediately connected to the terminal nodes
- *         (its leaves). A decision stump makes a prediction based on the value
- *         of just a single input feature. Sometimes they are also called
- *         1-rules http://en.wikipedia.org/wiki/Decision_stump
- *         
- *
- */
 public class DecisionStump {
 
 	public static final char OP_LESSER_THAN = '<';
@@ -42,12 +30,7 @@ public class DecisionStump {
 		this.classEst = new int[samplesCount];
 	}
 
-	/**
-	 * Classify Column Value Based on current Node Threshold
-	 * 
-	 * @param columnValue
-	 * @return
-	 */
+
 	public int classify(BigDecimal columnValue) {
 
 		switch (operation) {
@@ -99,10 +82,6 @@ public class DecisionStump {
 
 	/**
 	 * Calculate total error for current feature ( Column )
-	 * @param columnData
-	 * @param weights
-	 * @param labels
-	 * @return
 	 */
 	private BigDecimal calculateColumnWeightedError(ColumnData columnData,
 			double[] weights, int[] labels) {
@@ -122,12 +101,6 @@ public class DecisionStump {
 
 	/**
 	 * Find Best Split Feature and return it as stump
-	 * @param trainFile
-	 * @param labels
-	 * @param numberofSteps
-	 * @param weights
-	 * @return
-	 * @throws IOException
 	 */
 	public static DecisionStump bestStump(String strTrainData, int[] labels,
 										  int numberofSteps, double[] weights) throws IOException {
@@ -169,10 +142,6 @@ public class DecisionStump {
 
 	/**
 	 * Get Feature Information at @param index
-	 * @param trainFile
-	 * @param index
-	 * @return
-	 * @throws IOException
 	 */
 	public static ColumnData getColumnData(String strTrainData, int index)
 			throws IOException {
@@ -193,10 +162,7 @@ public class DecisionStump {
 	}
 
 	/**
-	 * Get Column Count without calculate last column because 
-	 * @param trainFile
-	 * @return
-	 * @throws IOException
+	 * Get Column Count without calculate last column because
 	 */
 	private static int getColumnCount(String strTrainData) throws IOException {
 		String arrStrRow[] = strTrainData.split("\n");
@@ -232,10 +198,7 @@ public class DecisionStump {
 		return columnIndex;
 	}
 
-	/**
-	 * 
-	 * Pojo Class to map column/feature data
-	 */
+
 	static class ColumnData {
 
 		List<Double> data;
