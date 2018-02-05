@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Celiac</string>
+    <string name="app_name">Cdiag</string>
     <string name="title_activity_user_view">UserView</string>
     <string name="title_activity_abouts">AboutsActivity</string>
     <string name="large_text">
