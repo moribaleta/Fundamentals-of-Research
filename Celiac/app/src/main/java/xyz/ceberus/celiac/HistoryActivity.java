@@ -3,6 +3,7 @@ package xyz.ceberus.celiac;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -64,6 +66,12 @@ public class HistoryActivity extends AppCompatActivity {
 
         fabAddItem.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.clockwise));
 
+        TextView textViewScroll = (TextView)findViewById(R.id.textViewScrollDown);
+        Animation animBlinking = AnimationUtils.loadAnimation(getBaseContext(), R.anim.blinking);
+        textViewScroll.startAnimation(animBlinking);
+
+
+
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean blClosed = true;
             @Override
@@ -95,6 +103,21 @@ public class HistoryActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (appBarLayout.getLayoutParams() != null) {
+            CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+            AppBarLayout.Behavior appBarLayoutBehaviour = new AppBarLayout.Behavior();
+            appBarLayoutBehaviour.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+                @Override
+                public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+                    if (arrUserData.size() > 0) {
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            layoutParams.setBehavior(appBarLayoutBehaviour);
+        }
         init();
     }
 
@@ -235,6 +258,8 @@ public class HistoryActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     private void processArrayList(ArrayList<String> arrayList) {

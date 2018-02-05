@@ -58,7 +58,8 @@
                 android:id="@+id/spnAnswer"
                 android:popupBackground="@android:color/background_light"
                 android:spinnerDropDownItemStyle="@style/spinnerItemStyle_1"
-                 />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
 
         </LinearLayout>
 
