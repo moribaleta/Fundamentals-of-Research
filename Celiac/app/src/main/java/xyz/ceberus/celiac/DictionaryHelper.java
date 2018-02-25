@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
@@ -46,6 +47,7 @@ public class DictionaryHelper extends SQLiteOpenHelper {
         boolean exists = checkDatabase();
 
         Log.v(TAG, exists ? "Database is valid" : "Database is not found or invalid");
+
         if (!exists) {
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
@@ -147,9 +149,33 @@ public class DictionaryHelper extends SQLiteOpenHelper {
         Cursor c = dictionary.rawQuery(sql, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
-            String strQuestion = c.getString(c.getColumnIndex("QUESTION"));
+            String strQuestion = null;
+            try {
+                strQuestion = c.getString(c.getColumnIndex("QUESTION"));
+            }catch (Exception e){
+                byte[] blobQuestion = c.getBlob(1);
+                try {
+                    strQuestion = new String(blobQuestion, "UTF-8");
+                } catch (UnsupportedEncodingException r) {
+                    r.printStackTrace();
+                }
+            }
+            String strInfo = null;
+            try{
+                strInfo = c.getString(c.getColumnIndex("INFO"));
+            }
+            catch (Exception e) {
+                byte[] blobInfo = c.getBlob(3);
+
+                try {
+                    strInfo = new String(blobInfo, "UTF-8");
+                } catch (UnsupportedEncodingException r) {
+                    e.printStackTrace();
+                }
+            }
+            /*String strQuestion = c.getString(c.getColumnIndex("QUESTION"));*/
+            /*String strInfo = c.getString(c.getColumnIndex("INFO"));*/
             String strAnswer = c.getString(c.getColumnIndex("ANSWER"));
-            String strInfo = c.getString(c.getColumnIndex("INFO"));
             Question question = new Question(strQuestion, strAnswer,strInfo);
             arrQuestion.add(question);
             c.moveToNext();

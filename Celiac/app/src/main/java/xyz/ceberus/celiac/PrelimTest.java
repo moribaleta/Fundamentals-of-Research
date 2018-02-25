@@ -4,10 +4,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
 
-public class Test extends AppCompatActivity {
+public class PrelimTest extends AppCompatActivity {
     private static final String TAG = "TEST";
     LinearLayout linearLayoutQuestion;
     TextView txtName, txtAge;
@@ -46,7 +46,7 @@ public class Test extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_prelim_test);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Test");
         linearLayoutQuestion = (LinearLayout) findViewById(R.id.linearQuestion);
@@ -65,9 +65,6 @@ public class Test extends AppCompatActivity {
             String strName = intent.getStringExtra("NAME");
             String strID = intent.getStringExtra("ID");
             int intAge = Integer.parseInt(intent.getStringExtra("AGE"));
-            arrIntAnswer[0] = intent.getIntExtra("Q1",1);
-            arrIntAnswer[1] = intent.getIntExtra("Q2",1);
-            arrIntAnswer[2] = intent.getIntExtra("Q3",1);
             //Log.e("UserData","id: "+strID+" name: "+strName+" age: "+intAge);
             userData = new UserData(strID, strName, intAge);
             txtName.setText(userData.getStrName());
@@ -93,7 +90,7 @@ public class Test extends AppCompatActivity {
     }
 
     void initListData() {
-
+        int intCount = 0;
         for (final Question question : arrayListQuestion) {
             View viewToLoad = LayoutInflater.from(
                     getApplicationContext()).inflate(
@@ -124,16 +121,12 @@ public class Test extends AppCompatActivity {
 
                 }
             });
-            if(index==0||index==1||index==2){
-                spinner.setEnabled(false);
-                spinner.setSelection(arrIntAnswer[index]-1);
-            }
             if (question.getStrInfo() != null) {
                 textMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Test.this);
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(PrelimTest.this);
 // ...Irrelevant code for customizing the buttons and title
                         dialogBuilder.setCancelable(true);
                         dialogBuilder.setNegativeButton(
@@ -143,7 +136,7 @@ public class Test extends AppCompatActivity {
                                         dialog.cancel();
                                     }
                                 });
-                        LayoutInflater inflater = (Test.this).getLayoutInflater();
+                        LayoutInflater inflater = (PrelimTest.this).getLayoutInflater();
                         View dialogView = inflater.inflate(R.layout.more_information, null);
                         dialogBuilder.setView(dialogView);
                         TextView textInfo = (TextView) dialogView.findViewById(R.id.textInfo);
@@ -163,6 +156,9 @@ public class Test extends AppCompatActivity {
 
             intCount++;
             linearLayoutQuestion.addView(viewToLoad);
+            if(intCount>=3){
+                break;
+            }
         }
 
     }
@@ -173,14 +169,34 @@ public class Test extends AppCompatActivity {
             fileStorage = new FileStorage(getBaseContext());
             String strName = userData.getStrName();
             int intAge = userData.getIntAge();
-
             String strAnswer = "";
-            for (int intAnswer : arrIntAnswer) {
-                strAnswer += intAnswer + "|";
+            if(arrIntAnswer[0]==2&&arrIntAnswer[1]==2&&arrIntAnswer[2]==2) {
+                strAnswer = "2|2|2|2|2|2|1|1|2|1|1|2|1|1|1|1|";
+                startTest(fileStorage, strAnswer);
+            }else {
+                fileStorage.close();
+                Intent intent = new Intent(PrelimTest.this,Test.class);
+                //UserData userData = arrUserData.get(i);
+                userData.showData();
+                intent.putExtra("ID", userData.getStrUserId());
+                intent.putExtra("NAME", userData.getStrName());
+                intent.putExtra("AGE", userData.getIntAge() + "");
+                intent.putExtra("Q1",arrIntAnswer[0]);
+                intent.putExtra("Q2",arrIntAnswer[1]);
+                intent.putExtra("Q3",arrIntAnswer[2]);
+                startActivity(intent);
+                finish();
+                /*for (int intAnswer : arrIntAnswer) {
+                    strAnswer += intAnswer + "|";
+                }*/
+
             }
             strAnswer = strAnswer.substring(0, strAnswer.length() - 1);
             Log.e("Test", "userdata: " + strAnswer + " , " + strName + " , " + intAge);
-            startTest(fileStorage, strAnswer);
+
+
+
+
             //final UserData userData = new UserData(strAnswer, strName, intAge, -1);
 
             /*final ProgressDialog dialog = ProgressDialog.show(this, "",
@@ -352,20 +368,20 @@ public class Test extends AppCompatActivity {
 
         });*/
 
-            //thread.start();
+        //thread.start();
 
 
-        }
+    }
 
 
 
     void showResult(UserData userDataResult) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Test.this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(PrelimTest.this);
 
         dialogBuilder.setCancelable(false);
         dialogBuilder.setPositiveButton("proceed", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Intent intent = new Intent(Test.this, DataView.class);
+                Intent intent = new Intent(PrelimTest.this, DataView.class);
                 intent.putExtra("ID", userData.getStrUserId());
                 startActivity(intent);
                 dialog.cancel();
@@ -419,7 +435,7 @@ public class Test extends AppCompatActivity {
     }
 
     void goBack() {
-        Intent intent = new Intent(Test.this, HistoryActivity.class);
+        Intent intent = new Intent(PrelimTest.this, HistoryActivity.class);
         userData.showData();
         intent.putExtra("ID", userData.getStrUserId());
         intent.putExtra("NAME", userData.getStrName());

@@ -163,7 +163,8 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     void openTest() {
-        Intent intent = new Intent(HistoryActivity.this, Test.class);
+        //Intent intent = new Intent(HistoryActivity.this, Test.class);
+        Intent intent = new Intent(HistoryActivity.this, PrelimTest.class);
         //UserData userData = arrUserData.get(i);
         userData.showData();
         intent.putExtra("ID", userData.getStrUserId());

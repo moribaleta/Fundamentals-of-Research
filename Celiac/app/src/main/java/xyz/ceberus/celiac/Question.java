@@ -14,10 +14,11 @@ public class Question {
         this.arrAnswer = strAnswer.split(",");
 
         try {
-            this.strInfo = strInfo.split("hyperlink")[0];
-            this.strLink = strInfo.split("hyperlink")[1];
+            String strInfoTemp = strInfo;
+            this.strInfo = strInfoTemp.split("hyperlink")[0];
+            this.strLink = strInfoTemp.split("hyperlink")[1];
         }catch (Exception e){
-            this.strInfo = null;
+            this.strInfo = strInfo;
             this.strLink = null;
             e.printStackTrace();
         }

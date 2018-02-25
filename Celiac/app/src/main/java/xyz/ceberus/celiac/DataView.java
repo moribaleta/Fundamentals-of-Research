@@ -195,10 +195,16 @@ public class DataView extends AppCompatActivity {
         strData = strData.replace("|", ",");
         //int arrIntData[] = new int[10];
         ArrayList<Integer> arrIntData = new ArrayList<>();
+
         for (String strDataItem : strData.split(",")) {
             int intData = Integer.parseInt(strDataItem);
             Log.e("DATAVIEW", "" + strDataItem + ": " + intData);
             arrIntData.add(intData);
+
+        }
+        Boolean blPrelimNegative = false;
+        if(arrIntData.get(0)==2&&arrIntData.get(1)==2&&arrIntData.get(2)==2){
+            blPrelimNegative = true;
         }
         FileStorage fileStorage;
 
@@ -237,6 +243,9 @@ public class DataView extends AppCompatActivity {
                 txtAnswer.setText(arrAnswer[intIndex - 1]);
                 intCount++;
                 linearTest.addView(viewToLoad);
+                if(intCount>=3&&blPrelimNegative){
+                    break;
+                }
             }
             //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, arrListData);
             //listViewData.setAdapter(arrayAdapter);

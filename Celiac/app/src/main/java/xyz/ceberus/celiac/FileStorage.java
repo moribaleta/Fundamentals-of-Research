@@ -113,4 +113,8 @@ public class FileStorage {
         dictionary.close();
         return userData;
     }
+
+    public void close() {
+        dictionary.close();
+    }
 }
