@@ -112,12 +112,11 @@ public class CeliacType {
     int TestResult(String strResults){
 
         String arrStrResults[] = strResults.split("\\|");
-        int intType1 = testType1(arrStrResults[0],arrStrResults[1]);
-        int intType2 = testType2(arrStrResults[2],arrStrResults[5],arrStrResults[10]);
-        int intType3 = testType3(arrStrResults[3],arrStrResults[4],
-                arrStrResults[6],arrStrResults[7],arrStrResults[8],arrStrResults[9],
-                arrStrResults[11],arrStrResults[12],arrStrResults[13],arrStrResults[14],
-                arrStrResults[15]);
+        int intType1 = testType1(arrStrResults[3],arrStrResults[9]);
+        int intType2 = testType2(arrStrResults[0],arrStrResults[1],arrStrResults[2],arrStrResults[9],arrStrResults[10]);
+        int intType3 = testType3(arrStrResults[6],arrStrResults[12],
+                arrStrResults[4],arrStrResults[5],arrStrResults[6],arrStrResults[7],
+                arrStrResults[8],arrStrResults[9],arrStrResults[11]);
         if(intType1==0&&intType2==0&&intType3==0){
             return 0;
         }/*
@@ -139,7 +138,17 @@ public class CeliacType {
             return 3;
     }
 
-    private int testType1(String strSymptoms1, String strSymptoms2) {
+    private int testType1(String strSymptoms4, String strSymptoms10) {
+        int intPass = 0;
+        if(Integer.parseInt(strSymptoms4)==1){
+            intPass++;
+        }
+        if(Integer.parseInt(strSymptoms10)==1){
+            intPass++;
+        }
+        return intPass;
+    }
+    private int testType2(String strSymptoms1, String strSymptoms2, String strSymptoms3,String strSymptoms10, String strSymptoms11) {
         int intPass = 0;
         if(Integer.parseInt(strSymptoms1)==1){
             intPass++;
@@ -147,14 +156,10 @@ public class CeliacType {
         if(Integer.parseInt(strSymptoms2)==1){
             intPass++;
         }
-        return intPass;
-    }
-    private int testType2(String strSymptoms3, String strSymptoms6, String strSymptoms11) {
-        int intPass = 0;
-        if(Integer.parseInt(strSymptoms3)>2){
+        if(Integer.parseInt(strSymptoms3)==1){
             intPass++;
         }
-        if(Integer.parseInt(strSymptoms6)>2){
+        if(Integer.parseInt(strSymptoms10)==1){
             intPass++;
         }
         if(Integer.parseInt(strSymptoms11)>2){
@@ -162,9 +167,9 @@ public class CeliacType {
         }
         return intPass;
     }
-    private int testType3(String strSymptoms4, String strSymptoms5, String strSymptoms7,
-                          String strSymptoms8, String strSymptoms9, String strSymptoms10, String strSymptoms12,
-                          String strSymptoms13, String strSymptoms14, String strSymptoms15, String strSymptoms16) {
+    private int testType3(String strSymptoms7, String strSymptoms13, String strSymptoms5,
+                          String strSymptoms6, String strSymptoms8, String strSymptoms9, String strSymptoms10,
+                          String strSymptoms12) {
         int intPass = 0;
         if(Integer.parseInt(strSymptoms4)==1){
             intPass++;
