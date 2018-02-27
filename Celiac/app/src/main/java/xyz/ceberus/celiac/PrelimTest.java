@@ -72,6 +72,72 @@ public class PrelimTest extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        /*Button btn = (Button)findViewById(R.id.button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(PrelimTest.this);
+// ...Irrelevant code for customizing the buttons and title
+                dialogBuilder.setCancelable(true);
+                dialogBuilder.setNegativeButton(
+                        "Close",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                LayoutInflater inflater = (PrelimTest.this).getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.more_information, null);
+                dialogBuilder.setView(dialogView);
+                TextView textInfo = (TextView) dialogView.findViewById(R.id.textInfo);
+                TextView textLink = (TextView) dialogView.findViewById(R.id.textLink);
+                textInfo.setText("Gluten is a general name for the proteins found in wheat (wheatberries, durum, emmer, semolina, spelt, farina, farro, graham, KAMUT® khorasan wheat and einkorn), rye, barley and triticale – a cross between wheat and rye. Gluten helps foods maintain their shape, acting as a glue that holds food together. Gluten can be found in many types of foods, even ones that would not be expected.\n" +
+                        "\n" +
+                        "Common foods with gluten:\n" +
+                        "•\tRice\n" +
+                        "•\tBread\n" +
+                        "•\tCereals\n" +
+                        "•\tSnacks with Wheat\n");
+                textLink.setText("https://celiac.org/live-gluten-free/glutenfreediet/what-is-gluten/#msV1FQp6eCLgrw2M.99");
+                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.setTitle("More Information about Gluten");
+                alertDialog.show();
+            }
+        });*/
+        TextView textViewLink = (TextView)findViewById(R.id.textViewLink);
+        textViewLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(PrelimTest.this);
+// ...Irrelevant code for customizing the buttons and title
+                dialogBuilder.setCancelable(true);
+                dialogBuilder.setNegativeButton(
+                        "Close",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                LayoutInflater inflater = (PrelimTest.this).getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.more_information, null);
+                dialogBuilder.setView(dialogView);
+                TextView textInfo = (TextView) dialogView.findViewById(R.id.textInfo);
+                TextView textLink = (TextView) dialogView.findViewById(R.id.textLink);
+                textInfo.setText("Gluten is a general name for the proteins found in wheat (wheatberries, durum, emmer, semolina, spelt, farina, farro, graham, KAMUT® khorasan wheat and einkorn), rye, barley and triticale – a cross between wheat and rye. Gluten helps foods maintain their shape, acting as a glue that holds food together. Gluten can be found in many types of foods, even ones that would not be expected.\n" +
+                        "\n" +
+                        "Common foods with gluten:\n" +
+                        "•\tRice\n" +
+                        "•\tBread\n" +
+                        "•\tCereals\n" +
+                        "•\tSnacks with Wheat\n");
+                textLink.setText("https://celiac.org/live-gluten-free/glutenfreediet/what-is-gluten/#msV1FQp6eCLgrw2M.99");
+                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.setTitle("More Information about Gluten");
+                alertDialog.show();
+                //Log.e("ALERT", "alert " + question.getStrInfo() + " - " + question.getStrLink());
+            }
+        });
+
         init();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.

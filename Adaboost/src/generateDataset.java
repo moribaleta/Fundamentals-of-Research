@@ -10,7 +10,7 @@ public class generateDataset {
 		FileReader fileReader;
 		BufferedReader buffReader;
 		try {
-			fileReader = new FileReader("resources/dataset2.csv");
+			fileReader = new FileReader("resources/dataset3.csv");
 			buffReader = new BufferedReader(fileReader);
 			String strline;
 			int intLoop = 1;

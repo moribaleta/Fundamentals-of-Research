@@ -32,7 +32,7 @@
                     android:text="Name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textName"
+                    android:id="@+id/textLink"
                     android:textSize="18sp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginEnd="10dp"
@@ -43,7 +43,7 @@
 
                 <TextView
                     android:text="Age"
-                    android:layout_below="@+id/textName"
+                    android:layout_below="@+id/textLink"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textAge"

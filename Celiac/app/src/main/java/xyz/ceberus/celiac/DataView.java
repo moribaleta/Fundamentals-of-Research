@@ -47,7 +47,7 @@ public class DataView extends AppCompatActivity {
             getUserData(strId);
         }
 
-        txtName = (TextView) findViewById(R.id.textName);
+        txtName = (TextView) findViewById(R.id.textLink);
         txtAge = (TextView) findViewById(R.id.textAge);
         txtResult = (TextView) findViewById(R.id.txtResult);
         txtDate = (TextView) findViewById(R.id.txtDate);

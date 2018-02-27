@@ -50,7 +50,7 @@ public class Test extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Test");
         linearLayoutQuestion = (LinearLayout) findViewById(R.id.linearQuestion);
-        txtName = (TextView) findViewById(R.id.textName);
+        txtName = (TextView) findViewById(R.id.textLink);
         txtAge = (TextView) findViewById(R.id.textAge);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +93,7 @@ public class Test extends AppCompatActivity {
     }
 
     void initListData() {
-
+        int intCountSet = 0;
         for (final Question question : arrayListQuestion) {
             View viewToLoad = LayoutInflater.from(
                     getApplicationContext()).inflate(
@@ -102,7 +102,8 @@ public class Test extends AppCompatActivity {
             TextView textView = (TextView) viewToLoad.findViewById(R.id.txtQuestion);
             TextView textMore = (TextView) viewToLoad.findViewById(R.id.textMore);
 
-            textViewCount.setText((intCount + 1) + ". ");
+            textViewCount.setText((intCountSet + 1) + ". ");
+            //textViewCount.setVisibility(View.INVISIBLE);
             textView.setText(question.getStrQuestion());
             Spinner spinner = (Spinner) viewToLoad.findViewById(R.id.spnAnswer);
             String arrStrAnswer[] = question.getArrAnswer();
@@ -124,10 +125,7 @@ public class Test extends AppCompatActivity {
 
                 }
             });
-            if(index==0||index==1||index==2){
-                spinner.setEnabled(false);
-                spinner.setSelection(arrIntAnswer[index]-1);
-            }
+
             if (question.getStrInfo() != null) {
                 textMore.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -162,7 +160,13 @@ public class Test extends AppCompatActivity {
 
 
             intCount++;
-            linearLayoutQuestion.addView(viewToLoad);
+            if(index==0||index==1||index==2){
+                /*spinner.setEnabled(false);
+                spinner.setSelection(arrIntAnswer[index]-1);*/
+            }else {
+                intCountSet++;
+                linearLayoutQuestion.addView(viewToLoad);
+            }
         }
 
     }
