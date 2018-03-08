@@ -10,17 +10,18 @@ public class generateDataset {
 		FileReader fileReader;
 		BufferedReader buffReader;
 		try {
-			fileReader = new FileReader("resources/dataset3.csv");
+			fileReader = new FileReader("resources/final_dataset.psv");
 			buffReader = new BufferedReader(fileReader);
 			String strline;
 			int intLoop = 1;
 			while ((strline = buffReader.readLine()) != null) {
 				//System.out.println(strline);
-				String arrSplit[] = strline.split(",");
-				String strBuilder = "";
-				String strResult = "";
+				String arrSplit[] = strline.split("\\|");
+				String strBuilder = strline;
+				String strResult = arrSplit[arrSplit.length-1];
+				strBuilder= strBuilder.substring(0,strBuilder.length()-strResult.length());
 				
-				for (String strItem : arrSplit) {
+				/*for (String strItem : arrSplit) {
 					//System.out.println(strItem);
 					if (strItem.equals("yes") || strItem.equals("never")) {
 						strBuilder += "1|";
@@ -40,10 +41,10 @@ public class generateDataset {
 					if (strItem.equals("FALSE")) {
 						strResult="-1";
 					}
-				}
+				}*/
 				strBuilder = strBuilder.substring(0,strBuilder.length()-1);
 				String strSQL = "INSERT INTO TRAINING_TBL ('DATASET','RESULT') values ('"+strBuilder+"','"+strResult+"');";
-				//String strPSV = strBuilder+"__";
+				//String strPSV = strBuilder+"|"+strResult+"\n";
 				System.out.println(strSQL);
 				//System.out.print(strPSV);
 				intLoop++;

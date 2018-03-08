@@ -83,6 +83,7 @@ public class DecisionStump {
 				.parseDouble(object[columnIndex])));*/
 		int intVal =  classify(BigDecimal.valueOf(Double
 				.parseDouble(object[columnIndex])));
+		//System.out.println("column index "+columnIndex);
 		//System.out.println("curr col: "+columnIndex+" value: "+object[columnIndex]+" output: "+intVal);
 		//return classify(BigDecimal.valueOf(object[columnIndex]));
 		return intVal;
@@ -139,12 +140,12 @@ public class DecisionStump {
 	 */
 	public static DecisionStump bestStump(File trainFile, int[] labels,
 			int numberofSteps, double[] weights) throws IOException {
-		System.out.println("bestStump");
+		//System.out.println("bestStump");
 		int columnsCount = getColumnCount(trainFile);
-		System.out.println("columnCount: "+columnsCount);
+		//System.out.println("columnCount: "+columnsCount);
 		DecisionStump minErrorDecisionStump = null;
 		
-		System.out.println("no of labels of decision stump: "+labels.length);
+		//System.out.println("no of labels of decision stump: "+labels.length);
 		
 		BigDecimal minError = BigDecimal.valueOf(Double.MAX_VALUE);
 		for (int i = 0; i < columnsCount; i++) {
@@ -153,7 +154,7 @@ public class DecisionStump {
 			BigDecimal stepSize = BigDecimal.valueOf(columnData.max)
 					.subtract(BigDecimal.valueOf(columnData.min))
 					.divide(BigDecimal.valueOf(numberofSteps));
-			System.out.println("index: "+i+" data: "+columnData.max+" stepSize: "+stepSize);
+			//System.out.println("index: "+i+" data: "+columnData.max+" stepSize: "+stepSize);
 			for (BigDecimal threshold = (BigDecimal.valueOf(columnData.min)
 					.subtract(stepSize)); 
 					threshold.compareTo(BigDecimal
@@ -170,7 +171,7 @@ public class DecisionStump {
 	
 					if (minError.compareTo(error) == 1) {
 						minError = error;
-						System.out.println("min error: "+minError);
+						//System.out.println("min error: "+minError);
 						minErrorDecisionStump = stump;
 					}
 

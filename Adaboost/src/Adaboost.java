@@ -6,6 +6,7 @@ import java.io.LineNumberReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Adaboost {
@@ -33,13 +34,13 @@ public class Adaboost {
 			int maxIteration, double targetError) throws IOException {
 
 		int samplesCount = getTotalSamplesNumber(trainFile);
-		System.out.println("sample count: "+samplesCount);
+		//System.out.println("sample count: "+samplesCount);
 		double[] weights = new double[samplesCount];
 		double[] aggClassEst = new double[samplesCount];
 		
 		for (int i = 0; i < weights.length; i++) {
 			weights[i] = ((double) 1 / samplesCount);
-			System.out.println("set init weight: "+weights[i]);
+			//System.out.println("set init weight: "+weights[i]);
 			aggClassEst[i] = 0;
 		}
 
@@ -56,7 +57,7 @@ public class Adaboost {
 			BigDecimal alpha = BigDecimal.valueOf(0.5)
 					.multiply(BigDecimal.valueOf(Math.log(log.doubleValue())))
 					.setScale(12, BigDecimal.ROUND_HALF_UP);
-			System.out.println("set init Alpha:"+alpha);
+			//System.out.println("set init Alpha:"+alpha);
 			stump.setAlpha(alpha);
 			model.add(stump);
 
@@ -77,16 +78,49 @@ public class Adaboost {
 	 * @return
 	 */
 	public int classify(String[] Observation) {
-
+		 
+		//int arrAttribute[] = new int[2];
+		HashMap<Integer,Attribute> hash = new HashMap<>();
 		BigDecimal sum = BigDecimal.ZERO;
 		int intStumpIndex = 0;
+		//BigDecimal max = BigDecimal.ZERO;
+		//int intMaxIndex = 0;
 		for (DecisionStump classifier : model) {
 			BigDecimal output = BigDecimal.valueOf(classifier.classify(Observation));
 			sum = sum.add(output.multiply(classifier.getAlpha())
 					);
-			System.out.println("index stump: "+intStumpIndex+" output: "+output+" sum: "+sum+" alpha: "+classifier.getAlpha());
+			//System.out.println("index stump: "+intStumpIndex+" output: "+output+" sum: "+sum+" alpha: "+classifier.getAlpha()+ "column index: "+classifier.getColumnIndex());
+			
+			int index = classifier.getColumnIndex();
+			
+			int count = 1;
+			
+			//int dbAlpha = classifier.getAlpha();
+			BigDecimal attri = output.multiply(classifier.getAlpha());
+			if(hash.get(index)!=null){
+				//count = hash.get(index)[0];
+				Attribute attr = hash.get(index);
+				count = attr.intCount;
+				BigDecimal sumAlpha = attr.bgAlpha;
+				sumAlpha = sumAlpha.add(classifier.getAlpha()) ;
+				BigDecimal attrOutput = attr.bgOutput;
+				//output = BigDecimal.valueOf(classifier.classify(Observation));
+				attrOutput = attrOutput.add(output.multiply(classifier.getAlpha()));
+				count++;
+				attr = new Attribute(count,sumAlpha,attrOutput);
+				hash.put(index,attr);
+				
+			}else{
+				hash.put(index, new Attribute(count,classifier.getAlpha(),output.multiply(classifier.getAlpha())));
+				
+			}
+			//System.out.println("key: "+index+" count: "+ hash.get(index));
 			intStumpIndex++;
 		}
+		for(int intKey: hash.keySet()){
+			System.out.println("attribute: "+intKey+" count: "+ hash.get(intKey).intCount+" alpha: "+hash.get(intKey).bgAlpha+" sum output: "+hash.get(intKey).bgOutput);
+		}
+		System.out.println("sum: "+sum);
 
 		if (sum.compareTo(BigDecimal.ZERO) == 1)
 			return 1;
@@ -235,7 +269,8 @@ public class Adaboost {
 		}
 
 		breader.close();
-		System.out.println("no of labels: "+i);
+		//
+		//System.out.println("no of labels: "+i);
 		return labels;
 	}
 

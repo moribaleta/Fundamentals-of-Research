@@ -3,11 +3,9 @@ package xyz.ceberus.celiac;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.design.widget.Snackbar;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,11 +16,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
@@ -35,13 +28,8 @@ public class PrelimTest extends AppCompatActivity {
     Button btnSubmit;
     ArrayList<Question> arrayListQuestion = new ArrayList<>();
     int arrIntAnswer[] = new int[16];
-    int intCount = 0;
     UserData userData;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,38 +60,7 @@ public class PrelimTest extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        /*Button btn = (Button)findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(PrelimTest.this);
-// ...Irrelevant code for customizing the buttons and title
-                dialogBuilder.setCancelable(true);
-                dialogBuilder.setNegativeButton(
-                        "Close",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                LayoutInflater inflater = (PrelimTest.this).getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.more_information, null);
-                dialogBuilder.setView(dialogView);
-                TextView textInfo = (TextView) dialogView.findViewById(R.id.textInfo);
-                TextView textLink = (TextView) dialogView.findViewById(R.id.textLink);
-                textInfo.setText("Gluten is a general name for the proteins found in wheat (wheatberries, durum, emmer, semolina, spelt, farina, farro, graham, KAMUT® khorasan wheat and einkorn), rye, barley and triticale – a cross between wheat and rye. Gluten helps foods maintain their shape, acting as a glue that holds food together. Gluten can be found in many types of foods, even ones that would not be expected.\n" +
-                        "\n" +
-                        "Common foods with gluten:\n" +
-                        "•\tRice\n" +
-                        "•\tBread\n" +
-                        "•\tCereals\n" +
-                        "•\tSnacks with Wheat\n");
-                textLink.setText("https://celiac.org/live-gluten-free/glutenfreediet/what-is-gluten/#msV1FQp6eCLgrw2M.99");
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.setTitle("More Information about Gluten");
-                alertDialog.show();
-            }
-        });*/
+
         TextView textViewLink = (TextView)findViewById(R.id.textViewLink);
         textViewLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,9 +96,7 @@ public class PrelimTest extends AppCompatActivity {
         });
 
         init();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
     void init() {
@@ -188,6 +143,7 @@ public class PrelimTest extends AppCompatActivity {
                 }
             });
             if (question.getStrInfo() != null) {
+                textMore.append(question.strTitle);
                 textMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -371,22 +327,8 @@ public class PrelimTest extends AppCompatActivity {
                         userDataResult.setDate();
                         fileStorage.insertUserHistory(userDataResult);
                         dialog.dismiss();
-                        Snackbar snackbar = Snackbar
-                                .make(linearLayoutQuestion, "Process complete", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                        snackbar.addCallback(new Snackbar.Callback() {
+                        showResult(userDataResult);
 
-                            @Override
-                            public void onDismissed(Snackbar snackbar, int event) {
-                                //
-                                showResult(userDataResult);
-                            }
-
-                            @Override
-                            public void onShown(Snackbar snackbar) {
-
-                            }
-                        });
                     }
                 });
             }
@@ -520,35 +462,6 @@ public class PrelimTest extends AppCompatActivity {
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Test Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
 }

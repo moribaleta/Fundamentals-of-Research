@@ -1,7 +1,6 @@
 package xyz.ceberus.celiac;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +18,7 @@ public class SplashScreen extends AppCompatActivity {
         getSupportActionBar().hide();
         getWindow().getAttributes().windowAnimations = R.style.Fade;
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.MULTIPLY);
         final ImageView imageView = (ImageView)findViewById(R.id.imageView);
         Animation anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.fadein);
         anim.setDuration(1000);
@@ -60,6 +59,7 @@ public class SplashScreen extends AppCompatActivity {
 
     void openHome() {
         Intent mainIntent = new Intent(SplashScreen.this, Home.class);
+        /*Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();*/
         SplashScreen.this.startActivity(mainIntent);
         SplashScreen.this.finish();
     }

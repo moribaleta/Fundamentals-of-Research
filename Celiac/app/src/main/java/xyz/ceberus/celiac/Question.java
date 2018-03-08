@@ -6,6 +6,7 @@ package xyz.ceberus.celiac;
 
 public class Question {
     String strQuestion;
+    String strTitle = null;
     String strInfo;
     String strLink;
     String arrAnswer[];
@@ -15,6 +16,8 @@ public class Question {
 
         try {
             String strInfoTemp = strInfo;
+            this.strTitle = strInfoTemp.split("__")[0];
+            strInfoTemp = strInfoTemp.split("__")[1];
             this.strInfo = strInfoTemp.split("hyperlink")[0];
             this.strLink = strInfoTemp.split("hyperlink")[1];
         }catch (Exception e){

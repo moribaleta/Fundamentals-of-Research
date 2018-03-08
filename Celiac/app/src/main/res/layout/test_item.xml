@@ -35,31 +35,32 @@
             android:textColor="@android:color/black" />
 
         <TextView
-            android:text="more info..."
+            android:id="@+id/textMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textMore"
-            android:textSize="14sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginLeft="16dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
+            android:text="more info about "
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/inner_box"
-            android:paddingBottom="10dp">
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="8dp">
 
             <Spinner
+                android:id="@+id/spnAnswer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spnAnswer"
-                android:popupBackground="@android:color/background_light"
-                android:spinnerDropDownItemStyle="@style/spinnerItemStyle_1"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:paddingRight="10dp"
+                android:popupBackground="@android:color/background_light"
+                android:spinnerDropDownItemStyle="@style/spinnerItemStyle_1" />
 
         </LinearLayout>
 

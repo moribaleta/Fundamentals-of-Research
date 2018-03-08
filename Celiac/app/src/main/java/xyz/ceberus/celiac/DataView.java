@@ -40,6 +40,7 @@ public class DataView extends AppCompatActivity {
         int intResult = Integer.parseInt(intent.getStringExtra("RESULT"));*/
         /*userData = new UserData(strDataSet, strName, intAge, intResult);*/
         String strId = intent.getStringExtra("ID");
+        setTitle("Test Result");
         int intPosition = intent.getIntExtra("POSITION", -1);
         if (intPosition != -1) {
             getUserDataByPosition(strId, intPosition);
@@ -227,16 +228,16 @@ public class DataView extends AppCompatActivity {
                 TextView txtCount = (TextView) viewToLoad.findViewById(R.id.txtCount);
                 TextView txtQuestion = (TextView) viewToLoad.findViewById(R.id.txtQuestion);
                 TextView txtAnswer = (TextView) viewToLoad.findViewById(R.id.txtAnswer);
-                TextView txtContribution = (TextView) viewToLoad.findViewById(R.id.txtContribution);
+                //TextView txtContribution = (TextView) viewToLoad.findViewById(R.id.txtContribution);
                 txtCount.setText((intCount + 1) + ".  ");
                 txtQuestion.setText(question.getStrQuestion());
-                try {
+                /*try {
                     Log.e(TAG, "data contribution: " + arrIntContribution[intCount]);
                     if (userData.getIntResult() != -1 && arrIntContribution[intCount] == 1)
                         txtContribution.setText("(this symptom have contributed to the result)");
                 } catch (IndexOutOfBoundsException e) {
 
-                }
+                }*/
                 /*if(arrIntContribution.get(intCount)!=null)
                     txtAnswer.setText(arrAnswer[intIndex - 1]+"\n(this symptom have contributed to the result)");
                 else*/

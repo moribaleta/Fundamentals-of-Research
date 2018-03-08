@@ -14,9 +14,11 @@ import java.util.ArrayList;
 public class Home extends AppCompatActivity {
     Button  btnAbouts;
     Button btnTest; /*btnHistory*/;
+    //static  Boolean blOnStart = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setTransition();
         setContentView(R.layout.activity_home);
         getSupportActionBar().hide();
         btnTest = (Button)findViewById(R.id.btnTest);
@@ -34,8 +36,11 @@ public class Home extends AppCompatActivity {
                 openHistory(view);
             }
         });*/
-
         getWindow().getAttributes().windowAnimations = R.style.Fade;
+        /*if(blOnStart){
+            getWindow().getAttributes().windowAnimations = R.style.Fade;
+            blOnStart = false;
+        }*/
         btnAbouts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

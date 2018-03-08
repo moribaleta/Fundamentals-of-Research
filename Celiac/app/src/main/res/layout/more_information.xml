@@ -30,8 +30,8 @@
                 android:layout_margin="10dp"
                 android:autoLink="web"
                 android:text="link"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorLink="@color/colorPrimaryDark" />
+                android:textColor="@color/colorAccent"
+                android:textColorLink="@color/colorAccent" />
         </LinearLayout>
     </ScrollView>
 
