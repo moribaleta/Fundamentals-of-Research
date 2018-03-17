@@ -38,7 +38,7 @@ public class FileStorage {
             }
             strBuilder = strBuilder.substring(0, strBuilder.length() - 1);
             Log.e("Test", "Traindata: " + strBuilder);
-            adaboost = Adaboost.train(strBuilder, 10, 25, 0);
+            adaboost = Adaboost.train(strBuilder, 10, 50, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
